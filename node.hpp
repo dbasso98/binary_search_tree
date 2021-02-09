@@ -1,5 +1,4 @@
 #ifndef NODE_HPP // include guard
-#endif
 #define NODE_HPP // or shall we use #pragma once (simpler and also can improve computational speed)
 
 #include <iostream>
@@ -17,14 +16,14 @@ class node{
     pair_type data;                     // data contained in the node
 
     // default constructor and destructor
-    node()  = default;
+    node() = default;
     ~node() noexcept = default;
 
     // custom constructors
 
     // create a node giving only the parent node and the value we want to store
     // basically is a copy ctor
-    node(const pair_type& d, node* parent = nullptr):                   
+    node(node* parent = nullptr, const pair_type& d):                   
     parent_node{parent}, left_child{nullptr},
     right_child{nullptr}, data{d} {}
 
@@ -34,8 +33,32 @@ class node{
     right_child{nullptr}, data{} {}
 
     // move ctor
-    node(const pair_type&& d, node* parent = nullptr):
+    node(node* parent = nullptr, const pair_type&& d) noexcept:
     parent{parent}, left_child{nullptr},
     right_child{nullptr}, data{std::move(d)} {}
 
+    // deleting copy ctor and copy assignment
+    // because we have only unique nodes in the bst
+    node(const node& other) = delete;
+    node& operator =(const node& other) = delete;
+
+    // some useful functions
+    node* get_left() {
+        left_child.get();
+    }
+
+    node* get_right() {
+        right_child.get();
+    }
+
+    node* get_parent() {
+        parent_node;
+    }
+
+    pair_type get_data() {
+        return data;
+    }
+
 };
+
+#endif
