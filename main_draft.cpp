@@ -1,11 +1,11 @@
+//DSSC 2020/2021 
+
 #include <algorithm>
 #include <iostream>
 #include <iterator>
 #include <memory>  // std::unique_ptr
 #include <utility> // std::move
 
-
-enum class Method { push_left, push_right };
 
 template <typename key_type, typename value_type, typename comparison = std::less<key_type>> 
 class bst{
@@ -15,23 +15,24 @@ class bst{
     std::unique_ptr<node> left;
     std::unique_ptr<node> right;
     pair_type data;
-    key_type key = std::get<0>(data);
-    value_type value = std::get<1>(data);
     
+    //key_type key = std::get<0>(data);
+    //value_type value = std::get<1>(data);
+ 
 
-    explicit node(const pair_type& x): data{x}, left(nullptr), right(nullptr) {};
+    explicit node(const pair_type &x): data{x}, left(nullptr), right(nullptr) {};
     node(const pair_type &x, node* p1, node* p2):left{p1}, right{p2}, data{x} {} //raw pointer here? 21:00 linkedlist vid
 
-    explicit node(key_type&& x): key{std::move(x)}, value{std::move(0)}, left(nullptr), right(nullptr) {}; //r-value
-    node(key_type &&x, node *p1, node *p2) : left{p1}, right{p2}, key{std::move(x)} {};
+    explicit node(pair_type&& x): data{std::move(x)}, left(nullptr), right(nullptr) {}; //r-value
+    node(pair_type &&x, node *p1, node *p2) : left{p1}, right{p2}, data{std::move(x)} {};
 
-    explicit node(const key_type &x): key{x}, value{0}, left(nullptr), right(nullptr) {}; //l-value
+    //explicit node(const key_type &x): key{x}, value{0}, left(nullptr), right(nullptr) {}; //l-value
     
     };
 
     std::unique_ptr<node> head;
     std::size_t _size;
-
+    comparison comp;
 
 
     // TODO comparison template
@@ -41,26 +42,8 @@ class bst{
     //   std::less<a.property.first>
     // return 
     // }
-    void push_left(const pair_type& x);
-    void push_right(const pair_type& x);
 
-    template <typename O> void push_left(O &&x) {
-    auto _node = new node{std::forward<O>(x)};
-    auto tmp = head.get();
-    if (!tmp) { // if tmp == nullptr
-      // our list is empty
-      head.reset(_node);
-      return;
-    }
-
-    while (tmp->left) // while tmp->next.get() != nullptr
-      tmp = tmp->left.get();
-
-    tmp->left.reset(_node);
-
-    }
-
-    template <typename O> void push_right(O &&x) {
+    template <typename O> void push(O &&x) {
     auto _node = new node{std::forward<O>(x)};
     auto tmp = head.get();
     if (!tmp) { // if tmp == nullptr
@@ -69,9 +52,21 @@ class bst{
       return;
     }
     }
+    
+    // if(comparison(std::get<0>(x),tmp->std::get<0>(data))){
+    //   while (tmp->left) // while tmp->next.get() != nullptr
+    //     tmp = tmp->left.get();     
+    // }
+    
+    // if(comparison(std::get<0>(x),tmp->std::get<0>(data)))
+    //     tmp->left.reset(_node);
+    // else
+    //     tmp->right.reset(_node);
+
+    // }
 
     template <typename O>
-    void _insert(O&& x, const Method m);
+    void _insert(O&& x);
 
 //     while (tmp->next ) // while tmp->next.get() != nullptr
 //       tmp = tmp->next.get();
@@ -98,8 +93,8 @@ public:
     // }
   }
 
-  void insert(const key_type &x, const Method m) { _insert(x, m); }
-  void insert(key_type&& x, const Method m) { _insert(std::move(x), m); }
+  void insert(const pair_type &x) { _insert(x); }
+  void insert(pair_type&& x) { _insert(std::move(x)); }
 
 
 //   friend std::ostream &operator<<(std::ostream &os, const bst &x) {
@@ -122,31 +117,19 @@ public:
 
 template <typename key_type, typename value_type, typename comparison>
 template <typename O>
-void bst<key_type, value_type, comparison>::_insert(O&& x, const Method m){
+void bst<key_type, value_type, comparison>::_insert(O&& x){
   std::cout << "forwarding insert" << std::endl;
-  switch(m){
-  case Method::push_left:
-    push_left(std::forward<O>(x)); 
-    break;
-  case Method::push_right:
-    push_right(std::forward<O>(x));
-    break;
-  default:
-    std::cerr << "unknown method" << std::endl;
-    break;
-    
-  };
+    push(std::forward<O>(x)); 
   ++_size;
-
 }
 
 int main() {
   bst<int,int,bool> bst1{};
   
-  int a = 8;
-  int b = 3;
-  bst1.insert(a, Method::push_left);
-  bst1.insert(b, Method::push_left);
+  auto p1 = std::make_pair(8, 0);
+ 
+  bst1.insert(p1);
+  //bst1.insert(b);
   //std::cout << bst1 << std::endl;
 
 }
