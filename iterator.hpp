@@ -5,12 +5,14 @@
 template <typename pair_type, typename node_type>
 class iterator {
     node_type* current;
-    node_type* left_most(node_type* other);
     
     public:
     using difference_type = std::ptrdiff_t; // pointer arithmetic
     using reference = pair_type&;
     using pointer = pair_type*;
+    
+    // function that given a ptr to a node finds the left most one
+    node_type* left_most(node_type* other);
 
     // default ctor and dtor
     iterator() = default;
@@ -38,7 +40,7 @@ class iterator {
 
     // operators overloading
     reference operator*() const noexcept{
-        return current->data;
+        return (*current).get_data();
     }
 
     pointer operator->() const noexcept{
@@ -65,9 +67,16 @@ class iterator {
     friend bool operator!=(const iterator& lhs, const iterator& rhs) noexcept{
         return !(lhs.current == rhs.current);
     }
+    
 };
 
 template <typename pair_type, typename node_type>
 node_type* iterator<pair_type,node_type>::left_most(node_type* other) {
-    
+    node_type* first_node = nullptr;
+    while((*other).get_left()) {
+        first_node = (*other).get_left();
+    }
+
+    return first_node;
 }
+
