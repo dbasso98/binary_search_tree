@@ -16,10 +16,12 @@ class bst {
     using iterator = iterator<pair_type, node_type>;
     using const_iterator = iterator<const pair_type, node_type>;
 
-    // member variables
+    // private member variables
     std::unique_ptr<node_type> head;
     std::size_t _size;
     comparison comp;
+
+    // private member functions
 
     public:
     // default ctor and dtor
@@ -30,7 +32,19 @@ class bst {
     bst(bst&& other) noexcept = default;
 	bst& operator=(bst&& other) noexcept = default;
 
-    // copy semantics
+    // deep copy semantics
+    bst(const bst& other):
+    _size{other._size}, comp{other.comp} {
+        if(other.head)
+            head.reset(new node_type{other.head})
+    }
+
+    bst& operator=(const bst& x) {
+        head.reset();
+        auto tmp = x; // copy ctor
+        *this = std::move(tmp); // move assignment
+        return *this;    
+    }
     
     
     // small member functions
@@ -59,9 +73,6 @@ class bst {
         return const_iterator{nullptr}
     }
 
-    private:
+    // operators overload
     
-
-
-
 };
