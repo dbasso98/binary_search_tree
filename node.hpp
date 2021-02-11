@@ -34,13 +34,24 @@ class node{
 
     // move ctor
     node(const pair_type&& d, node* parent = nullptr) noexcept:
-    parent{parent}, left_child{nullptr},
+    parent_node{parent}, left_child{nullptr},
     right_child{nullptr}, data{std::move(d)} {}
 
-    // deleting copy ctor and copy assignment
-    // because we have only unique nodes in the bst
-    node(const node& other) = delete;
-    node& operator =(const node& other) = delete;
+    // deep copy semantic
+    explicit node(const std::unique_ptr<node>& other):
+    data{other->data} {
+        if(other->parent_node) {
+            parent_node.reset(new node{other->parent_node})
+        }
+        if(other->right_child) {
+            right_child.reset(new node{other->right_child})
+            right_child->parent_node = this;
+        }
+        if(other->left_child) {
+            left_child.reset(new node{ptr->left_child})
+            left_child->parent_node = this;
+        }
+    }
 
     // some useful functions
     node* get_left() {
@@ -58,7 +69,7 @@ class node{
     pair_type get_data() {
         return data;
     }
-
 };
 
 #endif
+
