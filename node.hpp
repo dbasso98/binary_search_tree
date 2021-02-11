@@ -23,7 +23,7 @@ class node{
 
     // create a node giving only the parent node and the value we want to store
     // basically is a copy ctor
-    node(node* parent = nullptr, const pair_type& d):                   
+    node(const pair_type& d, node* parent = nullptr):                   
     parent_node{parent}, left_child{nullptr},
     right_child{nullptr}, data{d} {}
 
@@ -33,7 +33,7 @@ class node{
     right_child{nullptr}, data{} {}
 
     // move ctor
-    node(node* parent = nullptr, const pair_type&& d) noexcept:
+    node(const pair_type&& d, node* parent = nullptr) noexcept:
     parent{parent}, left_child{nullptr},
     right_child{nullptr}, data{std::move(d)} {}
 
