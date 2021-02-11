@@ -52,7 +52,7 @@ class node{
     }
 
     node* get_parent() {
-        parent_node;
+        return parent_node;
     }
 
     pair_type get_data() {
