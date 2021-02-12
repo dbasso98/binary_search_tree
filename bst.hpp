@@ -13,8 +13,9 @@ class bst {
     // using declaration
     using pair_type = std::pair<const key_type, value_type>;
     using node_type = node<pair_type>;
-    using iterator = iterator<pair_type, node_type>;
-    using const_iterator = iterator<const pair_type, node_type>;
+    using const_iterator = Iterator<const pair_type, node_type>;
+    using iterator = Iterator<pair_type, node_type>;
+
 
     // private member variables
     std::unique_ptr<node_type> head;
@@ -22,6 +23,8 @@ class bst {
     comparison comp;
 
     // private member functions
+    template<typename O>
+    std::pair<Iterator<O,node<O>>, bool> _insert(O&& x);
 
     public:
     // default ctor and dtor
@@ -36,20 +39,19 @@ class bst {
     bst(const bst& other):
     _size{other._size}, comp{other.comp} {
         if(other.head)
-            head.reset(new node_type{other.head})
+            head.reset(new node_type{other.head});
     }
 
     bst& operator=(const bst& x) {
-        head.reset();
+        clear();
         auto tmp = x; // copy ctor
         *this = std::move(tmp); // move assignment
         return *this;    
     }
     
-    
     // small member functions
     void clear() {
-        head.reset(nulltpr);
+        head.reset(nullptr);
         _size = 0;
     }
 
@@ -70,9 +72,37 @@ class bst {
         return const_iterator{nullptr};
     }
     const_iterator cend() const noexcept{
-        return const_iterator{nullptr}
+        return const_iterator{nullptr};
     }
 
     // operators overload
+
+    //
+    std::pair<iterator, bool> insert(const pair_type& x) {
+        return _insert(x);
+    }
+    std::pair<iterator, bool> insert(pair_type&& x) {
+        return _insert(std::move(x));
+    }
     
 };
+
+
+template<typename key_type, typename value_type, typename comparison>
+template<typename O>
+std::pair<Iterator<O,node<O>>, bool> bst<key_type, value_type, comparison>::_insert(O&& x){
+    std::cout << "forwarding insert" << std::endl;
+    auto _node = new node{std::forward<O>(x)};
+    auto tmp = head.get();
+    bool added = false;
+    if (!tmp) { // if tmp == nullptr
+        // our list is empty
+        head.reset(_node);
+        added = true;
+        ++_size;
+        auto pair = std::make_pair(Iterator<O,node<O>>{_node},added);
+        return pair;
+    }
+
+    return std::make_pair(Iterator<O,node<O>>{_node},added);
+}
