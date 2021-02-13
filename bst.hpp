@@ -21,6 +21,14 @@ class bst {
     std::unique_ptr<node_type> head;
     std::size_t _size;
     comparison comp;
+    node_type* leftmost(node_type* other) const noexcept {
+        node_type *first_node = other;
+        while (first_node->get_left()) {
+            first_node = first_node->get_left();
+        }
+
+        return first_node;
+    }
 
     // private member functions
     template<typename O>
@@ -56,13 +64,13 @@ class bst {
     }
 
     iterator begin() noexcept{
-        return iterator{left_most(head.get())};
+        return iterator{leftmost(head.get())};
     }
     const_iterator begin() const noexcept {
-        return const_iterator{left_most(head.get())};
+        return const_iterator{leftmost(head.get())};
     }
     const_iterator cbegin() const noexcept {
-        return const_iterator{left_most(head.get())};
+        return const_iterator{leftmost(head.get())};
     }
 
     iterator end() noexcept {
@@ -76,6 +84,16 @@ class bst {
     }
 
     // operators overload
+
+    friend
+    std::ostream& operator<<(std::ostream& os, const bst& x) {
+        os << "Size of the tree is:" << x._size << "\n";
+        for(const auto& el : x) {
+            os << "[ key=" << el.first <<" , value=" << el.second << " ]\n";
+        }
+        os << std::endl;
+        return os;
+    }
 
     //
     std::pair<iterator, bool> insert(const pair_type& x) {

@@ -6,14 +6,14 @@ template <typename pair_type, typename node_type>
 class Iterator
 {
     node_type *current;
-    node_type *next(node_type *cur);
 
 public:
     using difference_type = std::ptrdiff_t; // pointer arithmetic
     using reference = pair_type &;
     using pointer = pair_type *;
 
-    node_type *left_most(node_type *other);
+    node_type *left_most(node_type *other) const noexcept;
+    node_type *next(node_type *cur) const noexcept;
 
     // default ctor and dtor
     Iterator() = default;
@@ -51,14 +51,14 @@ public:
     }
 
     // pre increment
-    Iterator &operator++() const
+    Iterator &operator++() 
     {
         current = next(current);
         return *this;
     }
 
     // post increment
-    Iterator operator++(int) const
+    Iterator operator++(int) 
     {
         Iterator update{*this};
         ++(*update);
@@ -77,19 +77,19 @@ public:
 };
 
 template <typename pair_type, typename node_type>
-node_type *Iterator<pair_type, node_type>::left_most(node_type *other)
+node_type* Iterator<pair_type, node_type>::left_most(node_type *other) const noexcept
 {
     node_type *first_node = other;
-    while (other->get_left())
+    while (first_node->get_left())
     {
-        first_node = other->get_left();
+        first_node = first_node->get_left();
     }
 
     return first_node;
 }
 
 template <typename pair_type, typename node_type>
-node_type *Iterator<pair_type, node_type>::next(node_type *cur)
+node_type* Iterator<pair_type, node_type>::next(node_type *cur) const noexcept
 {
     auto next_one{cur};
     if (cur->get_right())

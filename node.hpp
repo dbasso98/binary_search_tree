@@ -74,7 +74,7 @@ class node{
         return parent_node;
     }
 
-    pair_type get_data() {
+    pair_type& get_data() {
         return data;
     }
 };
