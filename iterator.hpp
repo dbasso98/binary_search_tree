@@ -28,6 +28,7 @@ public:
     {
         it.current = nullptr;
     }
+    
     Iterator &operator=(Iterator &&it) noexcept
     {
         delete current;
