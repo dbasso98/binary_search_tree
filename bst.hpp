@@ -136,7 +136,6 @@ std::pair<Iterator<O,node<O>>, bool> bst<key_type, value_type, comparison>::_ins
                 added = false;
                 flag = -1;
                 tmp = nullptr;
-                //return std::make_pair(Iterator<O,node<O>>{_node},added);
             }  
         }
         // after having found the correct position, we can add the node to the tree
