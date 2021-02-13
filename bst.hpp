@@ -16,19 +16,10 @@ class bst {
     using const_iterator = Iterator<const pair_type, node_type>;
     using iterator = Iterator<pair_type, node_type>;
 
-
     // private member variables
     std::unique_ptr<node_type> head;
     std::size_t _size;
     comparison comp;
-    node_type* leftmost(node_type* other) const noexcept {
-        node_type *first_node = other;
-        while (first_node->get_left()) {
-            first_node = first_node->get_left();
-        }
-
-        return first_node;
-    }
 
     // private member functions
     template<typename O>
@@ -47,7 +38,7 @@ class bst {
     bst(const bst& other):
     _size{other._size}, comp{other.comp} {
         if(other.head)
-            head.reset(new node_type{other.head});
+            head.reset(other.head.get());
     }
 
     bst& operator=(const bst& x) {
@@ -64,13 +55,13 @@ class bst {
     }
 
     iterator begin() noexcept{
-        return iterator{leftmost(head.get())};
+        return iterator{head.get()->leftiest()};
     }
     const_iterator begin() const noexcept {
-        return const_iterator{leftmost(head.get())};
+        return const_iterator{head.get()->leftiest()};
     }
     const_iterator cbegin() const noexcept {
-        return const_iterator{leftmost(head.get())};
+        return const_iterator{head.get()->leftiest()};
     }
 
     iterator end() noexcept {
@@ -89,7 +80,7 @@ class bst {
     std::ostream& operator<<(std::ostream& os, const bst& x) {
         os << "Size of the tree is:" << x._size << "\n";
         for(const auto& el : x) {
-            os << "[ key=" << el.first <<" , value=" << el.second << " ]\n";
+            os << "[ key=" << el.first <<" , value=" << el.second << " ] ";
         }
         os << std::endl;
         return os;
@@ -109,8 +100,8 @@ class bst {
 template<typename key_type, typename value_type, typename comparison>
 template<typename O>
 std::pair<Iterator<O,node<O>>, bool> bst<key_type, value_type, comparison>::_insert(O&& x){
-    std::cout << "forwarding insert" << std::endl;
-    auto _node = new node{std::forward<O>(x)};
+    //std::cout << "forwarding insert" << std::endl;
+    auto _node = new node<O>{std::forward<O>(x)};
     auto tmp = head.get();
     bool added = false;
     if (!tmp) { // if tmp == nullptr
@@ -118,6 +109,7 @@ std::pair<Iterator<O,node<O>>, bool> bst<key_type, value_type, comparison>::_ins
         head.reset(_node);
         added = true;
         ++_size;
+        std::cout << "root insert" << std::endl;
         return std::make_pair(Iterator<O,node<O>>{_node},added);
     }
 
@@ -146,16 +138,19 @@ std::pair<Iterator<O,node<O>>, bool> bst<key_type, value_type, comparison>::_ins
             }  
         }
         // after having found the correct position, we can add the node to the tree
+        auto final_node = new node<O>{_node->get_data(),parent};
         switch(flag) {
             case 0:
-                parent->right_child.reset(_node);
+                parent->right_child.reset(final_node);
                 if(!parent->get_left())
                     ++_size;
+                std::cout << "right insert" << std::endl;
                 break;
             case 1:
-                parent->left_child.reset(_node);
+                parent->left_child.reset(final_node);
                 if(!parent->get_right())
                     ++_size;
+                std::cout << "left insert" << std::endl;
                 break;
             default:
                 std::cout << "node was already present" << std::endl;

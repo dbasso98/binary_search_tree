@@ -7,6 +7,17 @@
 
 template <typename pair_type>
 class node{
+
+    node* leftmost(node* other) noexcept {
+        auto first_node {other};
+        if(first_node) {
+            while (first_node->get_left()) {
+                first_node = first_node->get_left();
+            }
+        }
+
+        return first_node;
+    }
     
     public:
 
@@ -22,7 +33,6 @@ class node{
     // custom constructors
 
     // create a node giving only the parent node and the value we want to store
-    // basically is a copy ctor
     node(const pair_type& d, node* parent = nullptr):                   
     parent_node{parent}, left_child{nullptr},
     right_child{nullptr}, data{d} {}
@@ -32,7 +42,6 @@ class node{
     parent_node{parent}, left_child{nullptr},
     right_child{nullptr}, data{} {}
 
-    // move ctor
     node(const pair_type&& d, node* parent = nullptr) noexcept:
     parent_node{parent}, left_child{nullptr},
     right_child{nullptr}, data{std::move(d)} {}
@@ -77,6 +86,15 @@ class node{
     pair_type& get_data() {
         return data;
     }
+
+    node* leftiest() noexcept {
+		return leftmost(this);
+	}
+
+	const node* leftiest() const noexcept {
+		return leftmost(this);
+	}
+
 };
 
 #endif
