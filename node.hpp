@@ -41,25 +41,33 @@ class node{
     explicit node(const std::unique_ptr<node>& other):
     data{other->data} {
         if(other->parent_node) {
-            parent_node.reset(new node{other->parent_node})
+            parent_node = new node{other->parent_node};
         }
         if(other->right_child) {
-            right_child.reset(new node{other->right_child})
+            right_child.reset(new node{other->right_child});
             right_child->parent_node = this;
         }
         if(other->left_child) {
-            left_child.reset(new node{ptr->left_child})
+            left_child.reset(new node{other->left_child});
             left_child->parent_node = this;
         }
     }
 
+    node& operator=(const node& x) {
+        left_child.reset();
+        right_child.reset();
+        auto tmp = x; // copy ctor
+        *this = std::move(tmp); // move assignment
+        return *this;    
+    }
+
     // some useful functions
     node* get_left() {
-        left_child.get();
+        return left_child.get();
     }
 
     node* get_right() {
-        right_child.get();
+        return right_child.get();
     }
 
     node* get_parent() {
@@ -72,4 +80,3 @@ class node{
 };
 
 #endif
-

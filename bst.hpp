@@ -100,8 +100,49 @@ std::pair<Iterator<O,node<O>>, bool> bst<key_type, value_type, comparison>::_ins
         head.reset(_node);
         added = true;
         ++_size;
-        auto pair = std::make_pair(Iterator<O,node<O>>{_node},added);
-        return pair;
+        return std::make_pair(Iterator<O,node<O>>{_node},added);
+    }
+
+    else {
+        auto parent {tmp};
+        int flag {0};
+        // checking if we have to go left or right
+        while(tmp) {
+            // go right
+            if(comp(tmp->get_data().first, _node->get_data().first)) {
+                parent = tmp;
+                tmp = tmp->get_right();
+                flag = 0;
+            }
+            // go left
+            else if(!comp(tmp->get_data().first, _node->get_data().first)){
+                parent = tmp;
+                tmp = tmp->get_left();
+                flag = 1;
+            }
+            // this means that we have found that there already is a node
+            // with same key w.r.t. the one we wanted to insert
+            else {  
+                added = false;
+                tmp = nullptr;
+            }  
+        }
+        // after having found the correct position, we can add the node to the tree
+        switch(flag) {
+            case 0:
+                parent->right_child.reset(_node);
+                if(!parent->get_left())
+                    ++_size;
+                break;
+            case 1:
+                parent->left_child.reset(_node);
+                if(!parent->get_right())
+                    ++_size;
+                break;
+            default:
+                std::cout << "node was already present" << std::endl;
+                break;
+        }
     }
 
     return std::make_pair(Iterator<O,node<O>>{_node},added);
