@@ -1,5 +1,4 @@
-#ifndef NODE_HPP // include guard
-#define NODE_HPP // or shall we use #pragma once (simpler and also can improve computational speed)
+#pragma once
 
 #include <iostream>
 #include <memory> // std::unique_ptr
@@ -96,5 +95,3 @@ class node{
 	}
 
 };
-
-#endif

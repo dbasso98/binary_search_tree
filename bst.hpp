@@ -125,7 +125,7 @@ std::pair<Iterator<O,node<O>>, bool> bst<key_type, value_type, comparison>::_ins
                 flag = 0;
             }
             // go left
-            else if(!comp(tmp->get_data().first, _node->get_data().first)){
+            else if(comp(_node->get_data().first, tmp->get_data().first)){
                 parent = tmp;
                 tmp = tmp->get_left();
                 flag = 1;
@@ -134,7 +134,9 @@ std::pair<Iterator<O,node<O>>, bool> bst<key_type, value_type, comparison>::_ins
             // with same key w.r.t. the one we wanted to insert
             else {  
                 added = false;
+                flag = -1;
                 tmp = nullptr;
+                //return std::make_pair(Iterator<O,node<O>>{_node},added);
             }  
         }
         // after having found the correct position, we can add the node to the tree
