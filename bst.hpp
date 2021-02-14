@@ -153,8 +153,10 @@ class bst {
         if(child->get_right()){
             repopulate(child->get_right());
         }
-        auto info{child->get_data()};
-        _insert(info);
+        const pair_type i = child->get_data();
+        std::cout << "primo elemento: "<<i.first<< " secondo elemento: "<<i.second<< std::endl;
+
+        emplace(i.first, i.second);
         //child = nullptr;
     }
     void erase(const key_type& x){
