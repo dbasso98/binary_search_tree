@@ -26,6 +26,29 @@ class bst {
     std::pair<Iterator<O,node<O>>, bool> _insert(O&& x);
 
     template<typename T>
+    const_iterator _find(T&& x) const {
+        auto tmp {head.get()};
+        // checking if we have to go left or right
+        while(tmp) {
+            // go right
+            if(comp(tmp->get_data().first, x)) {
+                tmp = tmp->get_right();
+            }
+            // go left
+            else if(comp(x, tmp->get_data().first)){
+                tmp = tmp->get_left();
+            }
+            // this means that we have found that there already is a node
+            // with same key w.r.t. the one we wanted to insert
+            else {
+                std::cout << "Found node with key = "<< x << std::endl;  
+                return const_iterator{tmp};
+            }  
+        }
+        return end();
+    }
+
+    template<typename T>
     iterator _find(T&& x) {
         auto tmp {head.get()};
         // checking if we have to go left or right
@@ -65,7 +88,7 @@ class bst {
     }
 
     bst& operator=(const bst& x) {
-        clear();
+        this->clear();
         auto tmp = x; // copy ctor
         *this = std::move(tmp); // move assignment
         return *this;    
@@ -97,11 +120,12 @@ class bst {
         return const_iterator{nullptr};
     }
 
-    iterator find(const key_type& x){
+    iterator find(const key_type& x) noexcept{
         return _find(x);
+        
     }
-    const_iterator find(const key_type& x) const{
-        return _find(std::move(x));
+    const_iterator find(const key_type& x) const noexcept{
+        return _find(x);
     }
 
     
