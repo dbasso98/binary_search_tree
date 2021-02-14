@@ -23,20 +23,6 @@ public:
     // custom ctor
     explicit Iterator(node_type *other) noexcept : current{other} {}
 
-    // move semantics
-    explicit Iterator(Iterator &&it) noexcept : current{std::move(it.current)}
-    {
-        it.current = nullptr;
-    }
-    
-    Iterator &operator=(Iterator &&it) noexcept
-    {
-        delete current;
-        current = it.current;
-        it.current = nullptr;
-        return *this;
-    }
-
     // operators overloading
     reference operator*() const noexcept
     {

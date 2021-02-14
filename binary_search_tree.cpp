@@ -26,14 +26,21 @@ int main() {
         tree.insert(a);
     }
     */
+    
 
     tree.emplace(12,3);
 
     tree.find(3);
 
+    //tree.erase(3);
+
+    //tree.clear();
 
 
+
+    std::cout << tree[3] << std::endl;
     std::cout << tree << std::endl;
+
 
     return 0;
 }

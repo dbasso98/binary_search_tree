@@ -33,17 +33,23 @@ class node{
 
     // create a node giving only the parent node and the value we want to store
     node(const pair_type& d, node* parent = nullptr):                   
-    parent_node{parent}, left_child{nullptr},
-    right_child{nullptr}, data{d} {}
+    parent_node{parent}, data{d} {
+        left_child.reset();
+        right_child.reset();
+    }
 
     // create a node giving only the parent node
     explicit node(node* parent = nullptr):
-    parent_node{parent}, left_child{nullptr},
-    right_child{nullptr}, data{} {}
+    parent_node{parent}, data{} {
+        left_child.reset();
+        right_child.reset();
+    }
 
     node(const pair_type&& d, node* parent = nullptr) noexcept:
-    parent_node{parent}, left_child{nullptr},
-    right_child{nullptr}, data{std::move(d)} {}
+    parent_node{parent}, data{std::move(d)} {
+        left_child.reset();
+        right_child.reset();
+    }
 
     // deep copy semantic
     explicit node(const std::unique_ptr<node>& other):
