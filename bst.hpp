@@ -153,37 +153,45 @@ class bst {
         if(child->get_right()){
             repopulate(child->get_right());
         }
-
-        insert(child->get_data());
-        child = nullptr;
+        auto info{child->get_data()};
+        _insert(info);
+        //child = nullptr;
     }
-
     void erase(const key_type& x){
         auto tmp {head.get()};
-        while(tmp) {
-            // go right
-            if(comp(tmp->get_data().first, x)) {
-                tmp = tmp->get_right();
-            }
-            // go left
-            else if(comp(x, tmp->get_data().first)){
-                tmp = tmp->get_left();
-            }
-            // this means that we have found that there already is a node
-            // with same key w.r.t. the one we wanted to erase
-            else {
+        if(tmp){
+            while(tmp) {
+                // go right
+                if(comp(tmp->get_data().first, x)) {
+                    tmp = tmp->get_right();
+                }
+                // go left
+                else if(comp(x, tmp->get_data().first)){
+                    tmp = tmp->get_left();
+                }
+                // this means that we have found that there already is a node
+                // with same key w.r.t. the one we wanted to erase
+                else {
                 //save the children before erasing the father
                 auto rightChild{tmp->get_right()};
                 auto leftChild{tmp->get_left()};
                 //erase
+                auto to_delete = std::move(tmp);
+                //to_delete = nullptr;
                 tmp = nullptr;
+                //free(tmp);
+                free(to_delete);
+                //delete to_delete;
                 //insert all the "sub-tree" that starts from temp in order to keep the right structure of bst
-                repopulate(rightChild);
-                repopulate(leftChild);
-            }  
+                if(rightChild)
+                    repopulate(rightChild);
+                if(leftChild)
+                    repopulate(leftChild);
+                } 
+            }
         }
     }
-
+    
     std::size_t size() const noexcept{
         return this->_size;
     }

@@ -32,13 +32,13 @@ int main() {
 
     tree.find(3);
 
-    //tree.erase(3);
+    tree.erase(3);
 
     //tree.clear();
 
 
 
-    std::cout << tree[3] << std::endl;
+    //std::cout << tree[3] << std::endl;
     std::cout << tree << std::endl;
 
 
