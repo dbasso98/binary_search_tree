@@ -21,7 +21,7 @@ public:
     ~Iterator() noexcept = default;
 
     // custom ctor
-    explicit Iterator(node_type *other) noexcept : current{other} {}
+    explicit Iterator(node_type *other) : current{other} {}
 
     // operators overloading
     reference operator*() const noexcept

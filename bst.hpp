@@ -8,6 +8,8 @@
 #include "node.hpp"
 #include "iterator.hpp"
 
+#define COUNT 10  
+
 template<typename key_type, typename value_type, typename comparison=std::less<key_type>>
 class bst {
     // using declaration
@@ -25,51 +27,15 @@ class bst {
     template<typename O>
     std::pair<Iterator<O,node<O>>, bool> _insert(O&& x);
 
-    template<typename T>
-    const_iterator _find(T&& x) const noexcept{
-        auto tmp {head.get()};
-        // checking if we have to go left or right
-        while(tmp) {
-            // go right
-            if(comp(tmp->get_data().first, x)) {
-                tmp = tmp->get_right();
-            }
-            // go left
-            else if(comp(x, tmp->get_data().first)){
-                tmp = tmp->get_left();
-            }
-            // this means that we have found that there already is a node
-            // with same key w.r.t. the one we wanted to insert
-            else {
-                std::cout << "Found node with key = "<< x << std::endl;  
-                return const_iterator{tmp};
-            }  
-        }
-        return end();
-    }
+    void repopulate(node_type* child);
 
     template<typename T>
-    iterator _find(T&& x) noexcept{
-        auto tmp {head.get()};
-        // checking if we have to go left or right
-        while(tmp) {
-            // go right
-            if(comp(tmp->get_data().first, x)) {
-                tmp = tmp->get_right();
-            }
-            // go left
-            else if(comp(x, tmp->get_data().first)){
-                tmp = tmp->get_left();
-            }
-            // this means that we have found that there already is a node
-            // with same key w.r.t. the one we wanted to insert
-            else {
-                std::cout << "Found node with key = "<< x << std::endl;  
-                return iterator{tmp};
-            }  
-        }
-        return end();
-    }
+    const_iterator _find(T&& x) const noexcept;
+
+    template<typename T>
+    iterator _find(T&& x) noexcept;
+
+    void _print2D(node_type *root, int space) const noexcept;
 
     public:
     // default ctor and dtor
@@ -128,16 +94,6 @@ class bst {
         return _find(x);
     }
 
-    /*
-    template< class... Types >
-    std::pair<iterator,bool> emplace(Types&&... args);
-    */
-
-    template< class... Types >
-    std::pair<iterator,bool> emplace(Types&&... args) {
-        return insert(std::make_pair(std::forward<Types>(args)...));
-    }
-
     std::pair<iterator, bool> insert(const pair_type& x) {
         return _insert(x);
     }
@@ -146,62 +102,22 @@ class bst {
         return _insert(std::move(x));
     }
 
-    void repopulate(node_type* child){
-        if(child->get_left()){
-            repopulate(child->get_left());
-        }
-        if(child->get_right()){
-            repopulate(child->get_right());
-        }
-        const pair_type i = child->get_data();
-        std::cout << "primo elemento: "<<i.first<< " secondo elemento: "<<i.second<< std::endl;
+    template< class... Types >
+    std::pair<iterator,bool> emplace(Types&&... args) {
+        return insert(std::make_pair(std::forward<Types>(args)...));
+    }
 
-        emplace(i.first, i.second);
-        //child = nullptr;
-    }
-    void erase(const key_type& x){
-        auto tmp {head.get()};
-        if(tmp){
-            while(tmp) {
-                // go right
-                if(comp(tmp->get_data().first, x)) {
-                    tmp = tmp->get_right();
-                }
-                // go left
-                else if(comp(x, tmp->get_data().first)){
-                    tmp = tmp->get_left();
-                }
-                // this means that we have found that there already is a node
-                // with same key w.r.t. the one we wanted to erase
-                else {
-                //save the children before erasing the father
-                auto rightChild{tmp->get_right()};
-                auto leftChild{tmp->get_left()};
-                //erase
-                auto to_delete = std::move(tmp);
-                //to_delete = nullptr;
-                tmp = nullptr;
-                //free(tmp);
-                free(to_delete);
-                //delete to_delete;
-                //insert all the "sub-tree" that starts from temp in order to keep the right structure of bst
-                if(rightChild)
-                    repopulate(rightChild);
-                if(leftChild)
-                    repopulate(leftChild);
-                } 
-            }
-        }
-    }
+    void erase(const key_type& x);
     
     std::size_t size() const noexcept{
         return this->_size;
     }
+
     // operators overload
 
     friend
     std::ostream& operator<<(std::ostream& os, const bst& x) {
-        os << "Size of the tree is: " << x.size() << "\n";
+        os << "Depth of the tree is: " << x.size() << "\n";
         for(const auto& el : x) {
             os << "[ key=" << el.first <<" , value=" << el.second << " ] ";
         }
@@ -225,13 +141,16 @@ class bst {
         return insert(pair_type{std::move(x),{}}).first->second;
     }
     
+    void print2D() noexcept {  
+        _print2D(head.get(), 0);  
+    }  
+    
 };
 
 
 template<typename key_type, typename value_type, typename comparison>
 template<typename O>
 std::pair<Iterator<O,node<O>>, bool> bst<key_type, value_type, comparison>::_insert(O&& x){
-    //std::cout << "forwarding insert" << std::endl;
     auto _node = new node<O>{std::forward<O>(x)};
     auto tmp = head.get();
     bool added = false;
@@ -239,7 +158,6 @@ std::pair<Iterator<O,node<O>>, bool> bst<key_type, value_type, comparison>::_ins
         // our list is empty
         head.reset(_node);
         added = true;
-        ++_size;
         std::cout << "root insert" << std::endl;
         return std::make_pair(Iterator<O,node<O>>{_node},added);
     }
@@ -274,14 +192,16 @@ std::pair<Iterator<O,node<O>>, bool> bst<key_type, value_type, comparison>::_ins
         switch(flag) {
             case 0:
                 parent->right_child.reset(final_node);
-                if(!parent->get_left())
+                if(!parent->get_left()){
                     ++_size;
+                }
                 std::cout << "right insert" << std::endl;
                 break;
             case 1:
                 parent->left_child.reset(final_node);
-                if(!parent->get_right())
+                if(!parent->get_right()){
                     ++_size;
+                }
                 std::cout << "left insert" << std::endl;
                 break;
             default:
@@ -292,3 +212,140 @@ std::pair<Iterator<O,node<O>>, bool> bst<key_type, value_type, comparison>::_ins
 
     return std::make_pair(Iterator<O,node<O>>{_node},added);
 }
+
+template<typename key_type, typename value_type, typename comparison>
+template<typename T>
+typename bst<key_type, value_type, comparison>::const_iterator bst<key_type, value_type, comparison>::_find(T&& x) const noexcept{
+    auto tmp {head.get()};
+    // checking if we have to go left or right
+    while(tmp) {
+        // go right
+        if(comp(tmp->get_data().first, x)) {
+            tmp = tmp->get_right();
+        }
+        // go left
+        else if(comp(x, tmp->get_data().first)){
+            tmp = tmp->get_left();
+        }
+        // this means that we have found that there already is a node
+        // with same key w.r.t. the one we wanted to insert
+        else {
+            std::cout << "Found node with key = "<< x << std::endl;  
+            return const_iterator{tmp};
+        }  
+    }
+    return end();
+}
+
+template<typename key_type, typename value_type, typename comparison>
+template<typename T>
+typename bst<key_type, value_type, comparison>::iterator bst<key_type, value_type, comparison>::_find(T&& x) noexcept{
+    auto tmp {head.get()};
+    // checking if we have to go left or right
+    while(tmp) {
+        // go right
+        if(comp(tmp->get_data().first, x)) {
+            tmp = tmp->get_right();
+        }
+        // go left
+        else if(comp(x, tmp->get_data().first)){
+            tmp = tmp->get_left();
+        }
+        // this means that we have found that there already is a node
+        // with same key w.r.t. the one we wanted to insert
+        else {
+            std::cout << "Found node with key = "<< x << std::endl;  
+            return iterator{tmp};
+        }  
+    }
+    return end();
+}
+
+template<typename key_type, typename value_type, typename comparison>
+void bst<key_type, value_type, comparison>::repopulate(node_type* child){
+    if(child->get_left()){
+        repopulate(child->get_left());
+    }
+    if(child->get_right()){
+        repopulate(child->get_right());
+    }
+    const pair_type i = child->get_data();
+    std::cout << "key: "<<i.first<< " value: "<<i.second<< std::endl;
+
+    emplace(i.first, i.second);
+}
+
+template<typename key_type, typename value_type, typename comparison>
+void bst<key_type, value_type, comparison>::erase(const key_type& x){
+    auto tmp {head.get()};
+    if(tmp){
+        while(tmp) {
+            // go right
+            if(comp(tmp->get_data().first, x)) {
+                tmp = tmp->get_right();
+            }
+            // go left
+            else if(comp(x, tmp->get_data().first)){
+                tmp = tmp->get_left();
+            }
+            // this means that we have found that there already is a node
+            // with same key w.r.t. the one we wanted to erase
+            else {
+                //save the children before erasing the father
+                auto rightChild = new node_type{nullptr};
+                auto leftChild = new node_type{nullptr};
+                if(tmp->get_right())
+                    rightChild = new node_type{tmp->right_child};
+                if(tmp->get_left())
+                    leftChild = new node_type{tmp->left_child};
+
+                //erase
+                if(tmp != head.get()) {
+                    if(tmp->get_parent()->get_left() == tmp) {
+                        tmp->parent_node->left_child.release();
+                    }
+                    if(tmp->get_parent()->get_right() == tmp) {
+                        tmp->parent_node->right_child.release();
+                    }
+                }
+                else {
+                    std::cout << "deleting root node" << std::endl;
+                    this->clear();
+                }
+
+                tmp->parent_node = nullptr;
+                tmp->left_child.reset();
+                tmp->right_child.reset();
+                tmp = nullptr;
+
+                //insert all the "sub-tree" that starts from temp in order to keep the correct structure of bst
+                if(rightChild)
+                    repopulate(rightChild);
+                if(leftChild)
+                    repopulate(leftChild);
+            } 
+        }
+    }
+}
+
+template<typename key_type, typename value_type, typename comparison>
+void bst<key_type, value_type, comparison>::_print2D(node_type *root, int space) const noexcept{   
+        if (root == NULL)  
+            return;  
+    
+        // Increase distance between levels  
+        space += COUNT;  
+    
+        // Process right child first  
+        _print2D(root->get_right(), space);  
+    
+        // Print current node after space  
+        // count  
+        std::cout<<std::endl;  
+        for (int i = COUNT; i < space; i++)  
+            std::cout<<" ";  
+        std::cout<< root->get_data().first <<"\n";  
+    
+        // Process left child  
+        _print2D(root->get_left(), space);  
+    }  

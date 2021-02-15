@@ -45,7 +45,7 @@ class node{
         right_child.reset();
     }
 
-    node(const pair_type&& d, node* parent = nullptr) noexcept:
+    node(const pair_type&& d, node* parent = nullptr):
     parent_node{parent}, data{std::move(d)} {
         left_child.reset();
         right_child.reset();
@@ -76,19 +76,23 @@ class node{
     }
 
     // some useful functions
-    node* get_left() {
+    node* get_left() noexcept{
         return left_child.get();
     }
 
-    node* get_right() {
+    node* get_right() noexcept{
         return right_child.get();
     }
 
-    node* get_parent() {
+    node* get_parent() noexcept{
         return parent_node;
     }
 
-    pair_type& get_data() {
+    pair_type& get_data() noexcept{
+        return data;
+    }
+
+    const pair_type& get_data() const noexcept{
         return data;
     }
 
