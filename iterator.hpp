@@ -3,10 +3,10 @@
 #include <iostream>
 
 template <typename pair_type, typename node_type>
-class Iterator
-{
-public:
+class Iterator {
     node_type *current;
+    
+    public:
     using difference_type = std::ptrdiff_t; // pointer arithmetic
     using reference = pair_type &;
     using pointer = pair_type *;

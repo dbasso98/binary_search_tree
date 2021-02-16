@@ -32,20 +32,20 @@ class node{
 
     // create a node giving only the parent node and the value we want to store
     node(const pair_type& d, node* parent = nullptr):                   
-    parent_node{parent}, data{d} {
+    data{d}, parent_node{parent} {
         left_child.reset();
         right_child.reset();
     }
 
     // create a node giving only the parent node
     explicit node(node* parent = nullptr):
-    parent_node{parent}, data{} {
+    data{}, parent_node{parent}{ 
         left_child.reset();
         right_child.reset();
     }
 
     node(const pair_type&& d, node* parent = nullptr):
-    parent_node{parent}, data{std::move(d)} {
+    data{std::move(d)}, parent_node{parent} {
         left_child.reset();
         right_child.reset();
     }
