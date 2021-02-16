@@ -64,6 +64,10 @@ class bst {
         head.reset(nullptr);
         _size = 0;
     }
+    
+    void print2D() noexcept {  
+        _print2D(head.get(), 0);  
+    } 
 
     iterator begin() noexcept{
         return iterator{head.get()->leftiest()};
@@ -144,12 +148,7 @@ class bst {
             return it->second;
 
         return insert(pair_type{std::move(x),{}}).first->second;
-    }
-    
-    void print2D() noexcept {  
-        _print2D(head.get(), 0);  
-    }  
-    
+    } 
 };
 
 
