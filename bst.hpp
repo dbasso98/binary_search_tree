@@ -291,13 +291,20 @@ void bst<key_type, value_type, comparison>::erase(const key_type& x){
             // with same key w.r.t. the one we wanted to erase
             else {
                 isPresent = true;
+                bool hasRight{false};
+                bool hasLeft{false};
                 //save the children before erasing the father
                 auto rightChild = new node_type{nullptr};
                 auto leftChild = new node_type{nullptr};
-                if(tmp->get_right())
-                    rightChild = new node_type{tmp->right_child};
-                if(tmp->get_left())
-                    leftChild = new node_type{tmp->left_child};
+                if(tmp->get_right()){
+                     rightChild = new node_type{tmp->right_child};
+                     hasRight = true;
+                }
+
+                if(tmp->get_left()){
+                     leftChild = new node_type{tmp->left_child};
+                     hasLeft = true;
+                }
 
                 //erase
                 if(tmp != head.get()) {
@@ -319,9 +326,9 @@ void bst<key_type, value_type, comparison>::erase(const key_type& x){
                 tmp = nullptr;
 
                 //insert all the "sub-tree" that starts from temp in order to keep the correct structure of bst
-                if(rightChild)
+                if(hasRight)
                     repopulate(rightChild);
-                if(leftChild)
+                if(hasLeft)
                     repopulate(leftChild);
                 
                 std::cout << "Erased node with key = "<< x << std::endl;
