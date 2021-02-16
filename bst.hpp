@@ -32,10 +32,7 @@ class bst {
     void repopulate(node_type* child);
 
     template<typename T>
-    const_iterator _find(T&& x) const noexcept;
-
-    template<typename T>
-    iterator _find(T&& x) noexcept;
+    node_type* _find(T&& x) noexcept;
 
     void _print2D(node_type *root, int space) const noexcept;
 
@@ -89,11 +86,11 @@ class bst {
     }
 
     iterator find(const key_type& x) noexcept{
-        return _find(x);
+        return iterator{_find(x)};
         
     }
     const_iterator find(const key_type& x) const noexcept{
-        return _find(x);
+        return const_iterator{_find(x)};
     }
 
     std::pair<iterator, bool> insert(const pair_type& x) {
@@ -227,7 +224,8 @@ std::pair<Iterator<O,node<O>>, bool> bst<key_type, value_type, comparison>::_ins
 
 template<typename key_type, typename value_type, typename comparison>
 template<typename T>
-typename bst<key_type, value_type, comparison>::const_iterator bst<key_type, value_type, comparison>::_find(T&& x) const noexcept{
+node<std::pair<const key_type, value_type>>* bst<key_type, value_type, comparison>::_find(T&& x) noexcept{
+
     auto start = std::chrono::high_resolution_clock::now(); 
     auto tmp {head.get()};
     // checking if we have to go left or right
@@ -247,48 +245,16 @@ typename bst<key_type, value_type, comparison>::const_iterator bst<key_type, val
 
             auto stop = std::chrono::high_resolution_clock::now(); 
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);  
-            std::cout << "Time taken by insert: " << duration.count() << " microseconds" << std::endl; 
+            std::cout << "Time taken by find: " << duration.count() << " microseconds" << std::endl; 
 
-            return const_iterator{tmp};
+            return tmp;
         }  
     }
     std::cout << "Node with key = "<< x  << "is not present" << std::endl;
     auto stop = std::chrono::high_resolution_clock::now(); 
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);  
     std::cout << "Time taken by find: " << duration.count() << " microseconds" << std::endl; 
-    return end();
-}
-
-template<typename key_type, typename value_type, typename comparison>
-template<typename T>
-typename bst<key_type, value_type, comparison>::iterator bst<key_type, value_type, comparison>::_find(T&& x) noexcept{
-    auto start = std::chrono::high_resolution_clock::now();
-    auto tmp {head.get()};
-    // checking if we have to go left or right
-    while(tmp) {
-        // go right
-        if(comp(tmp->get_data().first, x)) {
-            tmp = tmp->get_right();
-        }
-        // go left
-        else if(comp(x, tmp->get_data().first)){
-            tmp = tmp->get_left();
-        }
-        // this means that we have found that there already is a node
-        // with same key w.r.t. the one we wanted to insert
-        else {
-            std::cout << "Found node with key = "<< x << "and value = " << tmp->get_data().second << std::endl;  
-            auto stop = std::chrono::high_resolution_clock::now(); 
-            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);  
-            std::cout << "Time taken by insert: " << duration.count() << " microseconds" << std::endl; 
-            return iterator{tmp};
-        }  
-    }
-    std::cout << "Node with key = "<< x  << " is not present" << std::endl;
-    auto stop = std::chrono::high_resolution_clock::now(); 
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);  
-    std::cout << "Time taken by find: " << duration.count() << " microseconds" << std::endl; 
-    return end();
+    return end().current;
 }
 
 

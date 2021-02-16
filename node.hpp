@@ -17,13 +17,12 @@ class node{
 
         return first_node;
     }
-    
-    public:
+    pair_type data;                     // data contained in the node
 
+    public:
     node* parent_node;                  // pointer to parent node
     std::unique_ptr<node> left_child;   // unique pointer to left child
     std::unique_ptr<node> right_child;  // unique pointer to right child
-    pair_type data;                     // data contained in the node
 
     // default constructor and destructor
     node() = default;

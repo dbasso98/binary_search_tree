@@ -5,9 +5,8 @@
 template <typename pair_type, typename node_type>
 class Iterator
 {
-    node_type *current;
-
 public:
+    node_type *current;
     using difference_type = std::ptrdiff_t; // pointer arithmetic
     using reference = pair_type &;
     using pointer = pair_type *;
