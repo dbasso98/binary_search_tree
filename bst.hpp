@@ -49,11 +49,11 @@ class bst {
     bst(const bst& other):
     _size{other._size}, comp{other.comp} {
         if(other.head)
-            head.reset(other.head.get());
+            head.reset(new node_type{*(other.head.get())});
     }
 
     bst& operator=(const bst& x) {
-        this->clear();
+        //this->clear();
         auto tmp = x; // copy ctor
         *this = std::move(tmp); // move assignment
         return *this;    
@@ -255,7 +255,7 @@ node<std::pair<const key_type, value_type>>* bst<key_type, value_type, compariso
             return tmp;
         }  
     }
-    std::cout << "Node with key = "<< x  << "is not present" << std::endl;
+    std::cout << "Node with key = "<< x  << " is not present" << std::endl;
     auto stop = std::chrono::high_resolution_clock::now(); 
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);  
     std::cout << "Time taken by find: " << duration.count() << " microseconds" << std::endl; 
@@ -302,12 +302,12 @@ void bst<key_type, value_type, comparison>::erase(const key_type& x){
                 auto rightChild = new node_type{nullptr};
                 auto leftChild = new node_type{nullptr};
                 if(tmp->get_right()){
-                     rightChild = new node_type{tmp->right_child};
+                     rightChild = new node_type{*(tmp->get_right())};
                      hasRight = true;
                 }
 
                 if(tmp->get_left()){
-                     leftChild = new node_type{tmp->left_child};
+                     leftChild = new node_type{*(tmp->get_left())};
                      hasLeft = true;
                 }
 
@@ -340,7 +340,7 @@ void bst<key_type, value_type, comparison>::erase(const key_type& x){
             } 
         }
         if(!isPresent){
-            std::cout << "Node with key = "<< x << "not found" <<std::endl;
+            std::cout << "Node with key = "<< x << " not found" <<std::endl;
         }
         auto stop = std::chrono::high_resolution_clock::now(); 
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);  

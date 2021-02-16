@@ -51,17 +51,17 @@ class node{
     }
 
     // deep copy semantic
-    explicit node(const std::unique_ptr<node>& other):
-    data{other->data} {
-        if(other->parent_node) {
-            parent_node = new node{other->parent_node};
+    explicit node(const node& other):
+    data{other.data}, parent_node{nullptr} { 
+        if(other.parent_node) {
+            parent_node = new node{other.parent_node};
         }
-        if(other->right_child) {
-            right_child.reset(new node{other->right_child});
+        if(other.right_child) {
+            right_child.reset(new node{*(other.right_child.get())});
             right_child->parent_node = this;
         }
-        if(other->left_child) {
-            left_child.reset(new node{other->left_child});
+        if(other.left_child) {
+            left_child.reset(new node{*(other.left_child.get())});
             left_child->parent_node = this;
         }
     }

@@ -43,16 +43,23 @@ int main() {
     tree.find(2);
 
     //tree.print2D();
-    std::cout << tree << std::endl;
+    //std::cout << tree << std::endl;
 
-    tree.erase(10);
+    tree.erase(8);
+    tree.print2D();
 
     //tree.clear();
 
     //std::cout << tree[3] << std::endl;
-    std::cout << tree << std::endl;
 
-    //tree.print2D();
+    auto tree2 {tree};
+    std::cout << tree2 << std::endl;
+
+    tree2.erase(3);
+
+    tree2.print2D();
+    tree.print2D();
+
     }
     catch(std::logic_error& e){
         std::cout << "Standard exception: " << e.what() << std::endl;
