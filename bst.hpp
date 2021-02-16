@@ -86,11 +86,17 @@ class bst {
     }
 
     iterator find(const key_type& x) noexcept{
-        return iterator{_find(x)};
+        if(_find(x))
+            return iterator{_find(x)};
+        else
+            return end();
         
     }
     const_iterator find(const key_type& x) const noexcept{
-        return const_iterator{_find(x)};
+        if(_find(x))
+            return const_iterator{_find(x)};
+        else
+            return end();
     }
 
     std::pair<iterator, bool> insert(const pair_type& x) {
@@ -254,7 +260,7 @@ node<std::pair<const key_type, value_type>>* bst<key_type, value_type, compariso
     auto stop = std::chrono::high_resolution_clock::now(); 
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);  
     std::cout << "Time taken by find: " << duration.count() << " microseconds" << std::endl; 
-    return end().current;
+    return nullptr;
 }
 
 
