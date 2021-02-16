@@ -5,6 +5,8 @@
 #include <vector>
 #include <memory>
 #include <utility>
+#include <exception>
+#include <chrono>
 #include "node.hpp"
 #include "iterator.hpp"
 
@@ -151,6 +153,7 @@ class bst {
 template<typename key_type, typename value_type, typename comparison>
 template<typename O>
 std::pair<Iterator<O,node<O>>, bool> bst<key_type, value_type, comparison>::_insert(O&& x){
+    auto start = std::chrono::high_resolution_clock::now(); 
     auto _node = new node<O>{std::forward<O>(x)};
     auto tmp = head.get();
     bool added = false;
@@ -159,6 +162,11 @@ std::pair<Iterator<O,node<O>>, bool> bst<key_type, value_type, comparison>::_ins
         head.reset(_node);
         added = true;
         std::cout << "root insert" << std::endl;
+        auto stop = std::chrono::high_resolution_clock::now(); 
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start); 
+  
+        std::cout << "Time taken by insert: " << duration.count() << " microseconds" << std::endl; 
+
         return std::make_pair(Iterator<O,node<O>>{_node},added);
     }
 
@@ -209,6 +217,10 @@ std::pair<Iterator<O,node<O>>, bool> bst<key_type, value_type, comparison>::_ins
                 break;
         }
     }
+    auto stop = std::chrono::high_resolution_clock::now(); 
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start); 
+  
+    std::cout << "Time taken by insert: " << duration.count() << " microseconds" << std::endl; 
 
     return std::make_pair(Iterator<O,node<O>>{_node},added);
 }
@@ -216,6 +228,7 @@ std::pair<Iterator<O,node<O>>, bool> bst<key_type, value_type, comparison>::_ins
 template<typename key_type, typename value_type, typename comparison>
 template<typename T>
 typename bst<key_type, value_type, comparison>::const_iterator bst<key_type, value_type, comparison>::_find(T&& x) const noexcept{
+    auto start = std::chrono::high_resolution_clock::now(); 
     auto tmp {head.get()};
     // checking if we have to go left or right
     while(tmp) {
@@ -231,15 +244,25 @@ typename bst<key_type, value_type, comparison>::const_iterator bst<key_type, val
         // with same key w.r.t. the one we wanted to insert
         else {
             std::cout << "Found node with key = "<< x << std::endl;  
+
+            auto stop = std::chrono::high_resolution_clock::now(); 
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);  
+            std::cout << "Time taken by insert: " << duration.count() << " microseconds" << std::endl; 
+
             return const_iterator{tmp};
         }  
     }
+    std::cout << "Node with key = "<< x  << "is not present" << std::endl;
+    auto stop = std::chrono::high_resolution_clock::now(); 
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);  
+    std::cout << "Time taken by find: " << duration.count() << " microseconds" << std::endl; 
     return end();
 }
 
 template<typename key_type, typename value_type, typename comparison>
 template<typename T>
 typename bst<key_type, value_type, comparison>::iterator bst<key_type, value_type, comparison>::_find(T&& x) noexcept{
+    auto start = std::chrono::high_resolution_clock::now();
     auto tmp {head.get()};
     // checking if we have to go left or right
     while(tmp) {
@@ -254,12 +277,20 @@ typename bst<key_type, value_type, comparison>::iterator bst<key_type, value_typ
         // this means that we have found that there already is a node
         // with same key w.r.t. the one we wanted to insert
         else {
-            std::cout << "Found node with key = "<< x << std::endl;  
+            std::cout << "Found node with key = "<< x << "and value = " << tmp->get_data().second << std::endl;  
+            auto stop = std::chrono::high_resolution_clock::now(); 
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);  
+            std::cout << "Time taken by insert: " << duration.count() << " microseconds" << std::endl; 
             return iterator{tmp};
         }  
     }
+    std::cout << "Node with key = "<< x  << " is not present" << std::endl;
+    auto stop = std::chrono::high_resolution_clock::now(); 
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);  
+    std::cout << "Time taken by find: " << duration.count() << " microseconds" << std::endl; 
     return end();
 }
+
 
 template<typename key_type, typename value_type, typename comparison>
 void bst<key_type, value_type, comparison>::repopulate(node_type* child){
@@ -270,15 +301,17 @@ void bst<key_type, value_type, comparison>::repopulate(node_type* child){
         repopulate(child->get_right());
     }
     const pair_type i = child->get_data();
-    std::cout << "key: "<<i.first<< " value: "<<i.second<< std::endl;
+    std::cout << "Repopulating node with key: "<<i.first<< " value: "<<i.second<< std::endl;
 
     emplace(i.first, i.second);
 }
 
 template<typename key_type, typename value_type, typename comparison>
 void bst<key_type, value_type, comparison>::erase(const key_type& x){
+    auto start = std::chrono::high_resolution_clock::now();
     auto tmp {head.get()};
     if(tmp){
+        bool isPresent{false};
         while(tmp) {
             // go right
             if(comp(tmp->get_data().first, x)) {
@@ -291,6 +324,7 @@ void bst<key_type, value_type, comparison>::erase(const key_type& x){
             // this means that we have found that there already is a node
             // with same key w.r.t. the one we wanted to erase
             else {
+                isPresent = true;
                 //save the children before erasing the father
                 auto rightChild = new node_type{nullptr};
                 auto leftChild = new node_type{nullptr};
@@ -323,8 +357,19 @@ void bst<key_type, value_type, comparison>::erase(const key_type& x){
                     repopulate(rightChild);
                 if(leftChild)
                     repopulate(leftChild);
+                
+                std::cout << "Erased node with key = "<< x << std::endl;
             } 
         }
+        if(!isPresent){
+            std::cout << "Node with key = "<< x << "not found" <<std::endl;
+        }
+        auto stop = std::chrono::high_resolution_clock::now(); 
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);  
+        std::cout << "Time taken by erase: " << duration.count() << " microseconds" << std::endl; 
+    }
+    else{
+        throw std::logic_error{"In function erase(): there is not a root node"};
     }
 }
 

@@ -3,12 +3,16 @@
 #include <string>
 #include <memory>
 #include <utility>
+#include <exception>
 #include "node.hpp"
 #include "iterator.hpp"
 #include "bst.hpp"
 
 int main() {
     bst<int,int,std::less<int>> tree {};
+
+    try{
+    //tree.erase(8);
     
     auto a = std::make_pair(8,0);
     auto b = std::make_pair(3,0);
@@ -38,18 +42,21 @@ int main() {
 
     tree.find(2);
 
-    tree.print2D();
+    //tree.print2D();
     std::cout << tree << std::endl;
 
-    tree.erase(8);
+    tree.erase(10);
 
     //tree.clear();
 
     //std::cout << tree[3] << std::endl;
     std::cout << tree << std::endl;
 
-    tree.print2D();
-
+    //tree.print2D();
+    }
+    catch(std::logic_error& e){
+        std::cout << "Standard exception: " << e.what() << std::endl;
+    };
 
     return 0;
 }
