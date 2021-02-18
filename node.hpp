@@ -7,7 +7,7 @@
 template <typename pair_type>
 class node{
 
-    node* leftmost(node* other) noexcept {
+    node* leftmost(node* other) const noexcept {
         auto first_node {other};
         if(first_node) {
             while (first_node->get_left()) {

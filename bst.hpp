@@ -32,7 +32,7 @@ class bst {
     void repopulate(node_type* child);
 
     template<typename T>
-    node_type* _find(T&& x) noexcept;
+    node_type* _find(T&& x) const noexcept;
 
     void _print2D(node_type *root, int space) const noexcept;
 
@@ -53,7 +53,6 @@ class bst {
     }
 
     bst& operator=(const bst& x) {
-        //this->clear();
         auto tmp = x; // copy ctor
         *this = std::move(tmp); // move assignment
         return *this;    
@@ -117,6 +116,9 @@ class bst {
     }
 
     void erase(const key_type& x);
+
+    void balance();
+    void insert_balanced_node(std::vector<pair_type> vec);
     
     std::size_t size() const noexcept{
         return this->_size;
@@ -229,7 +231,7 @@ std::pair<Iterator<O,node<O>>, bool> bst<key_type, value_type, comparison>::_ins
 
 template<typename key_type, typename value_type, typename comparison>
 template<typename T>
-node<std::pair<const key_type, value_type>>* bst<key_type, value_type, comparison>::_find(T&& x) noexcept{
+node<std::pair<const key_type, value_type>>* bst<key_type, value_type, comparison>::_find(T&& x) const noexcept{
 
     auto start = std::chrono::high_resolution_clock::now(); 
     auto tmp {head.get()};
@@ -322,7 +324,7 @@ void bst<key_type, value_type, comparison>::erase(const key_type& x){
                 }
                 else {
                     std::cout << "deleting root node" << std::endl;
-                    this->clear();
+                    clear();
                 }
 
                 tmp->parent_node = nullptr;
@@ -350,6 +352,40 @@ void bst<key_type, value_type, comparison>::erase(const key_type& x){
         throw std::logic_error{"In function erase(): there is not a root node"};
     }
 }
+
+template<typename key_type, typename value_type, typename comparison>
+void bst<key_type, value_type, comparison>::balance(){
+    auto start = std::chrono::high_resolution_clock::now();
+    std::vector<pair_type> v{};
+
+    for(iterator it = begin(); it != end(); ++it){
+        v.push_back(*it);
+    }
+    clear();
+    insert_balanced_node(v);
+    auto stop = std::chrono::high_resolution_clock::now(); 
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);  
+    std::cout << "Time taken by balance: " << duration.count() << " microseconds" << std::endl;
+}
+
+template<typename key_type, typename value_type, typename comparison>
+void bst<key_type, value_type, comparison>:: insert_balanced_node(std::vector<pair_type> vec){
+    
+    if(vec.size() > 0){
+        std::size_t const median = vec.size()/2;
+        emplace(vec[median].first,vec[median].second);
+        if(median > 0){
+            std::vector<pair_type> split_left(vec.begin(), vec.begin() + median - 1);
+            std::vector<pair_type> split_right(vec.begin() + median + 1, vec.end());
+            insert_balanced_node(split_left);
+            insert_balanced_node(split_right);
+        }
+    }
+    else{
+        return;
+    }    
+}
+ 
 
 template<typename key_type, typename value_type, typename comparison>
 void bst<key_type, value_type, comparison>::_print2D(node_type *root, int space) const noexcept{   
