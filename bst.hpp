@@ -375,7 +375,7 @@ void bst<key_type, value_type, comparison>:: insert_balanced_node(std::vector<pa
         std::size_t const median = vec.size()/2;
         emplace(vec[median].first,vec[median].second);
         if(median > 0){
-            std::vector<pair_type> split_left(vec.begin(), vec.begin() + median - 1);
+            std::vector<pair_type> split_left(vec.begin(), vec.begin() + median);
             std::vector<pair_type> split_right(vec.begin() + median + 1, vec.end());
             insert_balanced_node(split_left);
             insert_balanced_node(split_right);
