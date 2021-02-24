@@ -62,11 +62,11 @@ class bst {
     ~bst() noexcept = default;
 
     /** Move semantics */
-    bst(bst&& other) noexcept = default;
+    explicit bst(bst&& other) noexcept = default;
 	bst& operator=(bst&& other) noexcept = default;
 
     /** Deep-copy semantics */
-    bst(const bst& other):
+    explicit bst(const bst& other):
     _size{other._size}, comp{other.comp} {
         if(other.head)
             head.reset(new node_type{*(other.head.get())});
@@ -87,7 +87,7 @@ class bst {
     }
     
     /** Function for a 2D design of the existing tree */
-    void print2D() noexcept {  
+    void print2D() const fnoexcept {  
         _print2D(head.get(), 0);  
     } 
 
@@ -468,4 +468,5 @@ void bst<key_type, value_type, comparison>::_print2D(node_type *root, int space)
     _print2D(root->get_left(), space);  
 }  
  
+
 
