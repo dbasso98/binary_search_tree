@@ -42,7 +42,7 @@ class bst {
 
     /** Declaration of internal function to insert node. \p x passed as r-value, of typename O. */
     template<typename O>
-    std::pair<Iterator<O,node<O>>, bool> _insert(O&& x);
+    std::pair<iterator, bool> _insert(O&& x);
 
     /** Declaration of function to repopulate tree #TODO. \p child passed, pointer to a node type. */
     void repopulate(node_type* child);
@@ -51,8 +51,10 @@ class bst {
     template<typename T>
     node_type* _find(T&& x) const noexcept;
 
-    /** Declaration of internal function for a 2D design of the existing tree */
+    void insert_balanced_node(std::vector<pair_type> vec);
+
     void _print2D(node_type *root, int space) const noexcept;
+    
 
     public:
     /** Default Iterator Constructor and Destructor */
@@ -160,9 +162,6 @@ class bst {
 
     /** Declaration of function to balance the tree. */
     void balance();
-    /** Declaration of recursive function to insert node to balanced tree. 
-     * Takes std::vector type \p vec , of pair type.*/
-    void insert_balanced_node(std::vector<pair_type> vec);
     
     /** Returns size of the tree. */
     std::size_t size() const noexcept{
@@ -211,7 +210,7 @@ class bst {
 /** Definition of internal function to insert node. \p x passed as r-value, of typename O. */
 template<typename key_type, typename value_type, typename comparison>
 template<typename O>
-std::pair<Iterator<O,node<O>>, bool> bst<key_type, value_type, comparison>::_insert(O&& x){
+std::pair<typename bst<key_type, value_type, comparison>::iterator, bool> bst<key_type, value_type, comparison>::_insert(O&& x){
     auto start = std::chrono::high_resolution_clock::now(); 
     auto _node = new node<O>{std::forward<O>(x)};
     auto tmp = head.get();
@@ -433,9 +432,9 @@ void bst<key_type, value_type, comparison>:: insert_balanced_node(std::vector<pa
     
     if(vec.size() > 0){
         std::size_t const median = vec.size()/2;
-        emplace(vec[median].first,vec[median].second);
+        emplace(vec[median].first, vec[median].second);
         if(median > 0){
-            std::vector<pair_type> split_left(vec.begin(), vec.begin() + median - 1);
+            std::vector<pair_type> split_left(vec.begin(), vec.begin() + median);
             std::vector<pair_type> split_right(vec.begin() + median + 1, vec.end());
             insert_balanced_node(split_left);
             insert_balanced_node(split_right);
@@ -449,22 +448,24 @@ void bst<key_type, value_type, comparison>:: insert_balanced_node(std::vector<pa
 /** Definition of function for a 2D design of the existing tree. */
 template<typename key_type, typename value_type, typename comparison>
 void bst<key_type, value_type, comparison>::_print2D(node_type *root, int space) const noexcept{   
-        if (root == NULL)  
-            return;  
-    
-        // Increase distance between levels  
-        space += COUNT;  
-    
-        // Process right child first  
-        _print2D(root->get_right(), space);  
-    
-        // Print current node after space  
-        // count  
-        std::cout<<std::endl;  
-        for (int i = COUNT; i < space; i++)  
-            std::cout<<" ";  
-        std::cout<< root->get_data().first <<"\n";  
-    
-        // Process left child  
-        _print2D(root->get_left(), space);  
-    }  
+    if (root == NULL)  
+        return;  
+
+    // Increase distance between levels  
+    space += COUNT;  
+
+    // Process right child first  
+    _print2D(root->get_right(), space);  
+
+    // Print current node after space  
+    // count  
+    std::cout<<std::endl;  
+    for (int i = COUNT; i < space; i++)  
+        std::cout<<" ";  
+    std::cout<< root->get_data().first <<"\n";  
+
+    // Process left child  
+    _print2D(root->get_left(), space);  
+}  
+ 
+
