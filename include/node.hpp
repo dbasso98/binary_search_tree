@@ -92,6 +92,14 @@ class node{
         right_child.reset();
     }
 
+    /** \brief Move semantics
+     * 
+     * Implementing both move constructor and move assignment
+     * using default compiler generated ones.
+     */
+    explicit node(node&& other) noexcept = default;
+	node& operator=(node&& other) noexcept = default;
+
     
     /** \brief Deep copy semantics
      * 
