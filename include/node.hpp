@@ -11,12 +11,12 @@
  */
 template <typename pair_type>
 class node{
-    /** \brief Node content
+    /** \brief node content
      * 
-     * Pair type, containing a key and associated value, stored in var \private  data. */
+     * Pair type, containing a key and associated value, stored in var \private data. */
     pair_type data;  
 
-    /** \brief Pointer to far left node
+    /** \brief pointer to far left node
      * 
      *Private function that returns the node on the far left side of the tree, 
      * used as the begin of the iterator.
@@ -33,21 +33,21 @@ class node{
     }
 
     public:
-    /** \brief Parent node
+    /** \brief parent node
      * 
      * Pointer to the node that has the current node as one of its' childs.
      * Widely used in the insert function in order to find the correct place for a new node.
     */
     node* parent_node; 
 
-    /** \brief Left child
+    /** \brief left child
      * 
      * Unique pointer to the node that is left from the current, 
      * a node with a smaller key from the current node.
      */
     std::unique_ptr<node> left_child;   
 
-    /** \brief Right child 
+    /** \brief right child 
      * 
      * Unique pointer to the node that is right from the current, 
      * a node with a bigger key from the current node.
@@ -92,7 +92,7 @@ class node{
         right_child.reset();
     }
 
-    /** \brief Move semantics
+    /** \brief move semantics
      * 
      * Implementing both move constructor and move assignment
      * using default compiler generated ones.
@@ -101,7 +101,7 @@ class node{
 	node& operator=(node&& other) noexcept = default;
 
     
-    /** \brief Deep copy semantics
+    /** \brief deep copy semantics
      * 
      * Managing the resources from the lowest level, to achieve a deep copy of the bst itself.
      */
@@ -120,7 +120,7 @@ class node{
         }
     }
     
-    /** \brief Copy assignment
+    /** \brief copy assignment
      * 
      */
     node& operator=(const node& x) {

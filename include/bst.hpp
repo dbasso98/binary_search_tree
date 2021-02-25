@@ -18,103 +18,155 @@
  */
 template<typename key_type, typename value_type, typename comparison=std::less<key_type>>
 class bst {
-    /** Using declarations below*/
+    /** \subsection Using declarations below*/
 
-    /** Using declaration for pair_type. Represents a pair type of key and associated value. */
+    /** using declaration for pair_type. Represents a pair type of key and associated value. */
     using pair_type = std::pair<const key_type, value_type>;
-    /** Using declaration for pair_type. Represents a node type of a pair of key and associated value. */
+    /** using declaration for pair_type. Represents a node type of a pair of key and associated value. */
     using node_type = node<pair_type>;
-    /** Using declaration for pair_type. Represents a constant iterator class, defined by a pair type and node type. */
+    /** using declaration for pair_type. Represents a constant iterator class, defined by a pair type and node type. */
     using const_iterator = Iterator<const pair_type, node_type>;
-    /** Using declaration for pair_type. Represents an iterator class, defined by a pair type and node type. */
+    /** using declaration for pair_type. Represents an iterator class, defined by a pair type and node type. */
     using iterator = Iterator<pair_type, node_type>;
 
-    /** Private member variables. */
+    /** \subsection Private member variables. */
 
-    /** Root of the tree as \private head .*/
+    /** \brief head
+     * 
+     * Root of the tree as \private head */
     std::unique_ptr<node_type> head;
-    /** Size of the tree as \private _size .*/
+
+    /** \brief size
+     * 
+     * Size of the tree as \private _size .*/
     std::size_t _size;
-    /** Compare two nodes with \private comp #TODO .*/
+
+    /**  \brief compare two nodes
+     * 
+     * Compare two nodes, as \private comp.*/
     comparison comp;
 
-    /** Private member functions. */
+    /** \subsection Private member functions. */
 
-    /** Declaration of internal function to insert node. \p x passed as r-value, of typename O. */
+    /** internal insert
+     * 
+     * Internal function to insert node. \p x passed as r-value, of typename O. */
     template<typename O>
     std::pair<iterator, bool> _insert(O&& x);
 
-    /** Declaration of function to repopulate tree #TODO. \p child passed, pointer to a node type. */
-    void repopulate(node_type* child);
-
-    /** Declaration of internal function for finding a node based on key. \p x passed as r-value, of typename T. */
+    /** \brief internal find
+     * 
+     * Internal function for finding a node based on key. \p x passed as r-value, of typename T. */
     template<typename T>
     node_type* _find(T&& x) const noexcept;
 
+    void _print2D(node_type *root, int space) const noexcept;
+
+
+    /** #TODO
+     * 
+     * Function to repopulate tree #TODO. \p child passed, pointer to a node type. 
+     * Used after erasing a node in the tree.*/
+    void repopulate(node_type* child);
+
+    /** \brief recursive insert for balance
+     * 
+     * Auxiliary function for balance tree, recursive. The vector that holds the tree nodes, gets to be divided by the median. 
+     * Each splitted vector gets its' median inserted into the new, balanced tree. 
+     * Process repeated for each section divided by the median.
+     * Process stops when median doesn't hold anymore a positive value.*/
     void insert_balanced_node(std::vector<pair_type> vec);
 
-    void _print2D(node_type *root, int space) const noexcept;
-    
 
     public:
-    /** Default Iterator Constructor and Destructor */
+
+    /** \brief Default iterator Constructor and Destructor */
     bst() = default;
     ~bst() noexcept = default;
 
-    /** Move semantics */
+    /** \brief move semantics */
     explicit bst(bst&& other) noexcept = default;
 	bst& operator=(bst&& other) noexcept = default;
 
-    /** Deep-copy semantics */
+    /** \brief deep-copy semantics */
     explicit bst(const bst& other):
     _size{other._size}, comp{other.comp} {
         if(other.head)
             head.reset(new node_type{*(other.head.get())});
     }
 
-    /** Copy assignment */
+    /** \brief copy assignment */
     bst& operator=(const bst& x) {
         auto tmp {x}; // copy ctor
         *this = std::move(tmp); // move assignment
         return *this;    
     }
     
-    /** Member functions */
-    /** Function to clear the contents of the tree by setting head to null-pointer. */
+    /** \subsection Public member functions */
+
+    /** \brief delete tree
+     * 
+     * Function to clear the contents of the tree by setting head to null-pointer. */
     void clear() {
         head.reset(nullptr);
         _size = 0;
     }
     
-    /** Function for a 2D design of the existing tree */
+    /** \brief pretty print
+     * 
+     * Function for a 2D design of the existing tree */
     void print2D() const noexcept {  
         _print2D(head.get(), 0);  
     } 
 
-    /** Range for loop components implementation. */ 
-    /** Return an iterator to the left-most node (which, likely, is not the root node).*/
+    /** \subsection Range for loop components implementation. */ 
+
+    /** \brief begin of for loop with iterator
+     * 
+     * Return an iterator to the left-most node (which, likely, is not the root node).*/
     iterator begin() noexcept{
         return iterator{head.get()->leftiest()};
     }
+
+    /** \brief const begin of for loop with iterator
+     * 
+     * Return a const iterator to the left-most node (which, likely, is not the root node).*/
     const_iterator begin() const noexcept {
         return const_iterator{head.get()->leftiest()};
     }
+
+    /** \brief const begin of for loop with iterator
+     * 
+     * Return a const iterator to the left-most node (which, likely, is not the root node).*/
     const_iterator cbegin() const noexcept {
         return const_iterator{head.get()->leftiest()};
     }
 
-    /** Returns an iterator to one-past the last element. */
+    /** \brief end of for loop with iterator
+     * 
+     * Returns an iterator to one-past the last element. */
     iterator end() noexcept {
         return iterator{nullptr};
     }
+
+    /** \brief const end of for loop with iterator
+     * 
+     * Returns a const iterator to one-past the last element. */
     const_iterator end() const noexcept {
         return const_iterator{nullptr};
     }
+
+    /** \brief const end of for loop with iterator
+     * 
+     * Returns a const iterator to one-past the last element. */
     const_iterator cend() const noexcept{
         return const_iterator{nullptr};
     }
 
-    /** Find a given key, \p x passed as l-value. If the key is present, returns an iterator to the proper node, end() otherwise.
+    /** \brief find element in tree
+     * 
+     * Find a given key, \p x passed as l-value. 
+     * If the key is present, returns an iterator to the proper node, end() otherwise.
      */
     iterator find(const key_type& x) noexcept{
         return iterator{_find(x)};
@@ -122,14 +174,19 @@ class bst {
         
     }
 
-    /** Find a given key, \p x passed as l-value. If the key is present, returns a const iterator to the proper node, end() otherwise.
+    /** \brief const find element in tree by key
+     * 
+     * Find a given key, \p x passed as l-value. 
+     * If the key is present, returns a const iterator to the proper node, end() otherwise.
      */
     const_iterator find(const key_type& x) const noexcept{
         return const_iterator{_find(x)};
         
     }
 
-    /** Function to insert node based on \p x , as const pair type. 
+    /** \brief insert node by pair
+     * 
+     * Function to insert node based on \p x , as const l-value reference pair type. 
      * The function returns a pair of an iterator (pointing to the node) and a bool. 
      * The bool is true if a new node has been allocated, false otherwise.
      */
@@ -137,7 +194,9 @@ class bst {
         return _insert(x);
     }
     
-    /** Function to insert node based on \p x , as pair type. 
+    /** \brief const insert node by pair
+     * 
+     * Function to insert node based on \p x , as r-value reference pair type. 
      * The function returns a pair of an iterator (pointing to the node) and a bool. 
      * The bool is true if a new node has been allocated, false otherwise.
      */
@@ -145,7 +204,9 @@ class bst {
         return _insert(std::move(x));
     }
 
-    /** Inserts a new element into the container constructed in-place with the given args 
+    /** \brief emplace element
+     * 
+     * Inserts a new element into the container constructed in-place with the given args 
      * if there is no element with the key in the container.
      */
     template< class... Types >
@@ -153,21 +214,31 @@ class bst {
         return insert(std::make_pair(std::forward<Types>(args)...));
     }
 
-    /** Declaration of function that removes the element (if one exists) with the key equivalent to key. Takes const \p x , l-value reference of type key. */
+    /** \brief erase element from tree
+     * 
+     * Function that removes the element (if one exists) with the key equivalent to key. 
+     * When element found, deleted. After erase, tree repopulated.
+     * Takes const \p x , l-value reference of type key. */
     void erase(const key_type& x);
 
-    /** Declaration of function to balance the tree. */
+    /** \brief balance tree
+     * 
+     * Function to balance the tree. */
     void balance();
     
-    /** Returns size of the tree. */
+    /** \brief size of tree
+     * 
+     * Returns size of the tree. */
     std::size_t size() const noexcept{
         return this->_size;
     }
 
 
-    /** Operators overload. */
+    /** \subsection Operators overload. */
 
-    /** Put-to operator, takes insatnce of ostream, and \p x as l-value reference to bst type. */
+    /** \brief put-to
+     * 
+     * Put-to operator, takes insatnce of ostream, and \p x as l-value reference to bst type. */
     friend
     std::ostream& operator<<(std::ostream& os, const bst& x) {
         os << "Depth of the tree is: " << x.size() << "\n";
@@ -178,7 +249,9 @@ class bst {
         return os;
     }
 
-    /** Subscripting operator, takes \p x as l-value reference, of type key.
+    /** subscripting l-value 
+     * 
+     * Subscripting operator, takes \p x as l-value reference, of type key.
      * Returns a reference to the value that is mapped to a key equivalent to x, 
      * performing an insertion if such key does not already exist.
      */
@@ -190,7 +263,9 @@ class bst {
         return insert(pair_type{x,{}}).first->second;
     }
     
-    /** Subscripting operator, takes \p x as r-value reference, of type key.
+    /** subscripting r-value
+     * 
+     * Subscripting operator, takes \p x as r-value reference, of type key.
      * Returns a reference to the value that is mapped to a key equivalent to x, 
      * performing an insertion if such key does not already exist.
      */
@@ -203,7 +278,7 @@ class bst {
     } 
 };
 
-/** Definition of internal function to insert node. \p x passed as r-value, of typename O. */
+
 template<typename key_type, typename value_type, typename comparison>
 template<typename O>
 std::pair<typename bst<key_type, value_type, comparison>::iterator, bool> bst<key_type, value_type, comparison>::_insert(O&& x){
@@ -279,7 +354,7 @@ std::pair<typename bst<key_type, value_type, comparison>::iterator, bool> bst<ke
     return std::make_pair(Iterator<O,node<O>>{_node},added);
 }
 
-/** Definition of internal function for finding a node based on key. \p x passed as r-value, of typename T. */
+
 template<typename key_type, typename value_type, typename comparison>
 template<typename T>
 node<std::pair<const key_type, value_type>>* bst<key_type, value_type, comparison>::_find(T&& x) const noexcept{
@@ -315,7 +390,7 @@ node<std::pair<const key_type, value_type>>* bst<key_type, value_type, compariso
     return nullptr;
 }
 
-/** Definition of function to repopulate tree #TODO. \p child passed, pointer to a node type. */
+
 template<typename key_type, typename value_type, typename comparison>
 void bst<key_type, value_type, comparison>::repopulate(node_type* child){
     if(child->get_left()){
@@ -330,7 +405,7 @@ void bst<key_type, value_type, comparison>::repopulate(node_type* child){
     emplace(i.first, i.second);
 }
 
-/** Definition of function that removes the element (if one exists) with the key equivalent to key. Takes const \p x , l-value reference of type key. */
+
 template<typename key_type, typename value_type, typename comparison>
 void bst<key_type, value_type, comparison>::erase(const key_type& x){
     auto start = std::chrono::high_resolution_clock::now();
@@ -405,7 +480,7 @@ void bst<key_type, value_type, comparison>::erase(const key_type& x){
     }
 }
 
-/** Definition of function to balance the tree */
+
 template<typename key_type, typename value_type, typename comparison>
 void bst<key_type, value_type, comparison>::balance(){
     auto start = std::chrono::high_resolution_clock::now();
@@ -422,7 +497,7 @@ void bst<key_type, value_type, comparison>::balance(){
 }
 
 
-/** Definition of recursive function to insert node to balanced tree. Takes std::vector type \p vec , of pair type.*/
+
 template<typename key_type, typename value_type, typename comparison>
 void bst<key_type, value_type, comparison>:: insert_balanced_node(std::vector<pair_type> vec){
     
@@ -441,7 +516,7 @@ void bst<key_type, value_type, comparison>:: insert_balanced_node(std::vector<pa
     }    
 }
  
-/** Definition of function for a 2D design of the existing tree. */
+
 template<typename key_type, typename value_type, typename comparison>
 void bst<key_type, value_type, comparison>::_print2D(node_type *root, int space) const noexcept{   
     if (root == NULL)  

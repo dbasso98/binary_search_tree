@@ -9,21 +9,22 @@
 template <typename pair_type, typename node_type>
 class Iterator {
 
-    /** \brief Pointer to current node 
+    /** \brief pointer to current node 
      * 
      * Pointer to a node class, private to the user, \private current. */
     node_type *current;
     
     public:
     /** \subsection Default Iterator members. */
+
     using difference_type = std::ptrdiff_t; // pointer arithmetic
     using reference = pair_type &;
     using pointer = pair_type *;
     using iterator_category = std::forward_iterator_tag;
 
-    /** \brief Next node
+    /** \brief next node
      * 
-     * Declaration of function that returns pointer to the node that is successive to the current one, 
+     * Function that returns pointer to the node that is successive to the current one, 
      * which is passed as a pointer \p cur . */
     node_type *next(node_type *cur) const noexcept;
 
@@ -36,29 +37,33 @@ class Iterator {
      * Creates an iterator by receiving a pointer to node type as \p other . */
     explicit Iterator(node_type *other) : current{other} {}
 
-    /**
-     * Operator overloading. Operator * to return contents of the current Iterator instance */
+    /** \brief * overload
+     * 
+     * Overloading of operator * to return contents of the current Iterator node instance. */
     reference operator*() const noexcept
     {
         return current->get_data();
     }
 
-    /**
-     * Operator overloading. Operator -> to return #TODO */
+    /** \brief -> overload
+     * 
+     * #TODO */
     pointer operator->() const noexcept
     {
         return &(*(*this));
     }
 
-    /**
-     * Operator overloading. Operator ++ as pre-increment. */
+    /** \brief &..++ overload
+     * 
+     *  pre-increment as ++ overload*/
     Iterator &operator++() 
     {
         current = next(current);
         return *this;
     }
 
-    /**
+    /** \brief ++ overload
+     *
      * Operator overloading. Operator ++ as post-increment with \p int . */
     Iterator operator++(int) 
     {
@@ -66,20 +71,9 @@ class Iterator {
         ++(*update);
         return update;
     }
-
-    friend bool operator==(const Iterator &lhs, const Iterator &rhs) noexcept
-    {
-        return lhs.current == rhs.current;
-    }
-
-    friend bool operator!=(const Iterator &lhs, const Iterator &rhs) noexcept
-    {
-        return !(lhs == rhs);
-    }
 };
 
-/** Definition of Function that returns the pointer to the Node that is successive to the current one, 
-     * passed as a pointer to a Node \p cur */
+
 template <typename pair_type, typename node_type>
 node_type* Iterator<pair_type, node_type>::next(node_type *cur) const noexcept
 {
