@@ -67,26 +67,33 @@ int main() {
         // test if deep copy is actually working
         std::cout << "Printing original tree" << std::endl;
         tree.print2D();
-        std::cout << "Printing modified tree constructed through deep copy" << std::endl;
+        std::cout << "Printing modified tree constructed through deep copy (tree2)" << std::endl;
         tree2.print2D();
 
         // test deep copy assignment
         std::cout << "Testing copy assignment" << std::endl;
         bst<int,int,std::less<int>> tree3 {};
         tree3 = tree2;
+        tree3.erase(10);
+        std::cout << "Printing tree2" << std::endl;
+        tree2.print2D();
+        std::cout << "Printing tree3" << std::endl;
         tree3.print2D();
         
 
         // test move constructor
         std::cout << "Testing move constructor" << std::endl;
         auto tree4 {std::move(tree2)};
+        std::cout << "Printing tree2" << std::endl;
         tree2.print2D();
+        std::cout << "Printing tree4, created moving tree2" << std::endl;
         tree4.print2D();
 
         // test move assignment
         std::cout << "Testing move assignment" << std::endl;
         bst<int,int,std::less<int>> tree5 {};
         tree5 = std::move(tree4);
+        std::cout << "Printing tree5, created moving tree4" << std::endl;
         tree5.print2D();
         
 
