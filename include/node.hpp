@@ -126,7 +126,7 @@ class node{
     node& operator=(const node& x) {
         left_child.reset();
         right_child.reset();
-        auto tmp = x; // copy ctor
+        auto tmp {x}; // copy ctor
         *this = std::move(tmp); //move assignment
         return *this;    
     }
