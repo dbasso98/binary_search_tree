@@ -74,7 +74,7 @@ class bst {
 
     /** Copy assignment */
     bst& operator=(const bst& x) {
-        auto tmp = x; // copy ctor
+        auto tmp {x}; // copy ctor
         *this = std::move(tmp); // move assignment
         return *this;    
     }
