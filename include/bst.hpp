@@ -72,7 +72,7 @@ class bst {
             head.reset(new node_type{*(other.head.get())});
     }
 
-    /** Move assignment */
+    /** Copy assignment */
     bst& operator=(const bst& x) {
         auto tmp = x; // copy ctor
         *this = std::move(tmp); // move assignment
@@ -87,7 +87,7 @@ class bst {
     }
     
     /** Function for a 2D design of the existing tree */
-    void print2D() const fnoexcept {  
+    void print2D() const noexcept {  
         _print2D(head.get(), 0);  
     } 
 
@@ -117,20 +117,16 @@ class bst {
     /** Find a given key, \p x passed as l-value. If the key is present, returns an iterator to the proper node, end() otherwise.
      */
     iterator find(const key_type& x) noexcept{
-        if(_find(x))
-            return iterator{_find(x)};
-        else
-            return end();
+        return iterator{_find(x)};
+        
         
     }
 
     /** Find a given key, \p x passed as l-value. If the key is present, returns a const iterator to the proper node, end() otherwise.
      */
     const_iterator find(const key_type& x) const noexcept{
-        if(_find(x))
-            return const_iterator{_find(x)};
-        else
-            return end();
+        return const_iterator{_find(x)};
+        
     }
 
     /** Function to insert node based on \p x , as const pair type. 
@@ -215,7 +211,7 @@ std::pair<typename bst<key_type, value_type, comparison>::iterator, bool> bst<ke
     auto _node = new node<O>{std::forward<O>(x)};
     auto tmp = head.get();
     bool added = false;
-    if (!tmp) { // if tmp == nullptr
+    if (!tmp) {
         // our list is empty
         head.reset(_node);
         added = true;
@@ -467,6 +463,3 @@ void bst<key_type, value_type, comparison>::_print2D(node_type *root, int space)
     // Process left child  
     _print2D(root->get_left(), space);  
 }  
- 
-
-
