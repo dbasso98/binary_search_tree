@@ -71,6 +71,29 @@ class Iterator {
         ++(*update);
         return update;
     }
+
+    /** \brief == overload
+     * \param[in] lhs const Iterator l-value reference used as lhs of the equation
+     * \param[in] rhs const Iterator l-value reference used as rhs of the equation 
+     * 
+     * Operator == overloading.
+     */
+    friend bool operator==(const Iterator &lhs, const Iterator &rhs) noexcept
+    {
+        return lhs.current == rhs.current;
+    }
+
+    /** \brief != overload
+     * \param[in] lhs const Iterator l-value reference used as lhs of the equation
+     * \param[in] rhs const Iterator l-value reference used as rhs of the equation 
+     *
+     * Operator != overloading. Returning value obtained using the == operator
+     * and taking the negation of the result
+     */
+    friend bool operator!=(const Iterator &lhs, const Iterator &rhs) noexcept
+    {
+        return !(lhs == rhs);
+    }
 };
 
 
