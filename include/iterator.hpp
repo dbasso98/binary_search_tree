@@ -1,8 +1,10 @@
-#pragma once //instead of ifdef and so on
+#pragma once
 
 #include <iostream>
 
-/** Custom Forward Iterator Template class for members of the binary search tree concept.
+/** \class Iterator
+ * 
+ * Custom Forward Iterator Template class for members of the binary search tree concept.
  * Every instance of the Iterator class is a pointer to a Node type.
  * Mainly used to tarverse the tree in order.
  */
@@ -15,7 +17,6 @@ class Iterator {
     node_type *current;
     
     public:
-    /** \subsection Default Iterator members. */
 
     using difference_type = std::ptrdiff_t; // pointer arithmetic
     using reference = pair_type &;
@@ -37,7 +38,7 @@ class Iterator {
      * Creates an iterator by receiving a pointer to node type as \p other . */
     explicit Iterator(node_type *other) : current{other} {}
 
-    /** \brief * overload
+    /** \brief star operator overload
      * 
      * Overloading of operator * to return contents of the current Iterator node instance. */
     reference operator*() const noexcept
@@ -47,15 +48,16 @@ class Iterator {
 
     /** \brief -> overload
      * 
-     * #TODO */
+     * Accessing first member of iterator through a pointer.
+     * */
     pointer operator->() const noexcept
     {
         return &(*(*this));
     }
 
-    /** \brief &..++ overload
+    /** \brief ++ overload
      * 
-     *  pre-increment as ++ overload*/
+     *  Operator ++ as pre-increment.*/
     Iterator &operator++() 
     {
         current = next(current);
@@ -64,7 +66,7 @@ class Iterator {
 
     /** \brief ++ overload
      *
-     * Operator overloading. Operator ++ as post-increment with \p int . */
+     * Operator ++ as post-increment with \p int . */
     Iterator operator++(int) 
     {
         auto update(*this);
@@ -73,25 +75,25 @@ class Iterator {
     }
 
     /** \brief == overload
-     * \param[in] lhs const Iterator l-value reference used as lhs of the equation
-     * \param[in] rhs const Iterator l-value reference used as rhs of the equation 
      * 
      * Operator == overloading.
+     * \p lhs const Iterator l-value reference used as lhs of the equation while
+     * \p rhs const Iterator l-value reference used as rhs of the equation.
      */
     friend bool operator==(const Iterator &lhs, const Iterator &rhs) noexcept
     {
         return lhs.current == rhs.current;
     }
 
-    /** \brief != overload
-     * \param[in] lhs const Iterator l-value reference used as lhs of the equation
-     * \param[in] rhs const Iterator l-value reference used as rhs of the equation 
+    /** \brief  \!= overload
      *
-     * Operator != overloading. Returning value obtained using the == operator
-     * and taking the negation of the result
+     * Operator != overloading.
+     * \p lhs const Iterator l-value reference used as lhs of the equation while
+     * \p rhs const Iterator l-value reference used as rhs of the equation.
+     * Returning value obtained using the == operator
+     * and taking the negation of the result.
      */
-    friend bool operator!=(const Iterator &lhs, const Iterator &rhs) noexcept
-    {
+    friend bool operator!=(const Iterator &lhs, const Iterator &rhs) noexcept {
         return !(lhs == rhs);
     }
 };

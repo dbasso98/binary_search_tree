@@ -1,0 +1,160 @@
+\hypertarget{classIterator}{}\doxysection{Iterator$<$ pair\+\_\+type, node\+\_\+type $>$ Class Template Reference}
+\label{classIterator}\index{Iterator$<$ pair\_type, node\_type $>$@{Iterator$<$ pair\_type, node\_type $>$}}
+
+
+{\ttfamily \#include $<$iterator.\+hpp$>$}
+
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classIterator_aa782aa48b752ab702a6d3578ae0024fa}\label{classIterator_aa782aa48b752ab702a6d3578ae0024fa}} 
+using {\bfseries difference\+\_\+type} = std\+::ptrdiff\+\_\+t
+\item 
+\mbox{\Hypertarget{classIterator_a22403555cdb20439e0aa2f1b250c3c25}\label{classIterator_a22403555cdb20439e0aa2f1b250c3c25}} 
+using {\bfseries reference} = pair\+\_\+type \&
+\item 
+\mbox{\Hypertarget{classIterator_a42d37f3dc777aa08d30d5a123f127989}\label{classIterator_a42d37f3dc777aa08d30d5a123f127989}} 
+using {\bfseries pointer} = pair\+\_\+type $\ast$
+\item 
+\mbox{\Hypertarget{classIterator_acc4c81ab1d718f0e2254ab404a48c211}\label{classIterator_acc4c81ab1d718f0e2254ab404a48c211}} 
+using {\bfseries iterator\+\_\+category} = std\+::forward\+\_\+iterator\+\_\+tag
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+node\+\_\+type $\ast$ \mbox{\hyperlink{classIterator_a48b36cec9b2b2219b25be5c9cb1785e6}{next}} (node\+\_\+type $\ast$cur) const noexcept
+\begin{DoxyCompactList}\small\item\em next node \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classIterator_adbe5af65649b15ab9d5a2419c578244c}\label{classIterator_adbe5af65649b15ab9d5a2419c578244c}} 
+\mbox{\hyperlink{classIterator_adbe5af65649b15ab9d5a2419c578244c}{Iterator}} ()=default
+\begin{DoxyCompactList}\small\item\em Default iterator Constructor and Destructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classIterator_a2fdf7de9611f22589a1c36bb33440fb3}{Iterator}} (node\+\_\+type $\ast$other)
+\begin{DoxyCompactList}\small\item\em Custom iterator Constructor. \end{DoxyCompactList}\item 
+reference \mbox{\hyperlink{classIterator_a4356934da4473aef6a3ba6f2ea92e819}{operator$\ast$}} () const noexcept
+\begin{DoxyCompactList}\small\item\em 
+\begin{DoxyItemize}
+\item overload 
+\end{DoxyItemize}\end{DoxyCompactList}\item 
+pointer \mbox{\hyperlink{classIterator_a1d21cceef0603b06978a1ec92b54d0bc}{operator-\/$>$}} () const noexcept
+\begin{DoxyCompactList}\small\item\em -\/$>$ overload \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classIterator}{Iterator}} \& \mbox{\hyperlink{classIterator_a85e8026fdd481f853b3c600c22739c52}{operator++}} ()
+\begin{DoxyCompactList}\small\item\em ++ overload \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classIterator}{Iterator}} \mbox{\hyperlink{classIterator_a8a5290d6e78810cebd020bda10dc0177}{operator++}} (int)
+\begin{DoxyCompactList}\small\item\em ++ overload \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classIterator_a1baec9d3f7e8e68b4fb5e35b5ca5067c}{operator==}} (const \mbox{\hyperlink{classIterator}{Iterator}} \&lhs, const \mbox{\hyperlink{classIterator}{Iterator}} \&rhs) noexcept
+\begin{DoxyCompactList}\small\item\em == overload \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classIterator_ac9f4b77c14334b544087c908e0eeb1f2}{operator!=}} (const \mbox{\hyperlink{classIterator}{Iterator}} \&lhs, const \mbox{\hyperlink{classIterator}{Iterator}} \&rhs) noexcept
+\begin{DoxyCompactList}\small\item\em != overload \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename pair\+\_\+type, typename node\+\_\+type$>$\newline
+class Iterator$<$ pair\+\_\+type, node\+\_\+type $>$}
+
+Custom Forward \mbox{\hyperlink{classIterator}{Iterator}} Template class for members of the binary search tree concept. Every instance of the \mbox{\hyperlink{classIterator}{Iterator}} class is a pointer to a Node type. Mainly used to tarverse the tree in order. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classIterator_a2fdf7de9611f22589a1c36bb33440fb3}\label{classIterator_a2fdf7de9611f22589a1c36bb33440fb3}} 
+\index{Iterator$<$ pair\_type, node\_type $>$@{Iterator$<$ pair\_type, node\_type $>$}!Iterator@{Iterator}}
+\index{Iterator@{Iterator}!Iterator$<$ pair\_type, node\_type $>$@{Iterator$<$ pair\_type, node\_type $>$}}
+\doxysubsubsection{\texorpdfstring{Iterator()}{Iterator()}}
+{\footnotesize\ttfamily template$<$typename pair\+\_\+type , typename node\+\_\+type $>$ \\
+\mbox{\hyperlink{classIterator}{Iterator}}$<$ pair\+\_\+type, node\+\_\+type $>$\+::\mbox{\hyperlink{classIterator}{Iterator}} (\begin{DoxyParamCaption}\item[{node\+\_\+type $\ast$}]{other }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+
+
+Custom iterator Constructor. 
+
+Creates an iterator by receiving a pointer to node type as {\ttfamily other} . 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classIterator_a48b36cec9b2b2219b25be5c9cb1785e6}\label{classIterator_a48b36cec9b2b2219b25be5c9cb1785e6}} 
+\index{Iterator$<$ pair\_type, node\_type $>$@{Iterator$<$ pair\_type, node\_type $>$}!next@{next}}
+\index{next@{next}!Iterator$<$ pair\_type, node\_type $>$@{Iterator$<$ pair\_type, node\_type $>$}}
+\doxysubsubsection{\texorpdfstring{next()}{next()}}
+{\footnotesize\ttfamily template$<$typename pair\+\_\+type , typename node\+\_\+type $>$ \\
+node\+\_\+type $\ast$ \mbox{\hyperlink{classIterator}{Iterator}}$<$ pair\+\_\+type, node\+\_\+type $>$\+::next (\begin{DoxyParamCaption}\item[{node\+\_\+type $\ast$}]{cur }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+next node 
+
+Function that returns pointer to the node that is successive to the current one, which is passed as a pointer {\ttfamily cur} . \mbox{\Hypertarget{classIterator_a4356934da4473aef6a3ba6f2ea92e819}\label{classIterator_a4356934da4473aef6a3ba6f2ea92e819}} 
+\index{Iterator$<$ pair\_type, node\_type $>$@{Iterator$<$ pair\_type, node\_type $>$}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!Iterator$<$ pair\_type, node\_type $>$@{Iterator$<$ pair\_type, node\_type $>$}}
+\doxysubsubsection{\texorpdfstring{operator$\ast$()}{operator*()}}
+{\footnotesize\ttfamily template$<$typename pair\+\_\+type , typename node\+\_\+type $>$ \\
+reference \mbox{\hyperlink{classIterator}{Iterator}}$<$ pair\+\_\+type, node\+\_\+type $>$\+::operator$\ast$ (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+
+\begin{DoxyItemize}
+\item overload 
+\end{DoxyItemize}
+
+Overloading of operator $\ast$ to return contents of the current \mbox{\hyperlink{classIterator}{Iterator}} node instance. \mbox{\Hypertarget{classIterator_a85e8026fdd481f853b3c600c22739c52}\label{classIterator_a85e8026fdd481f853b3c600c22739c52}} 
+\index{Iterator$<$ pair\_type, node\_type $>$@{Iterator$<$ pair\_type, node\_type $>$}!operator++@{operator++}}
+\index{operator++@{operator++}!Iterator$<$ pair\_type, node\_type $>$@{Iterator$<$ pair\_type, node\_type $>$}}
+\doxysubsubsection{\texorpdfstring{operator++()}{operator++()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename pair\+\_\+type , typename node\+\_\+type $>$ \\
+\mbox{\hyperlink{classIterator}{Iterator}}\& \mbox{\hyperlink{classIterator}{Iterator}}$<$ pair\+\_\+type, node\+\_\+type $>$\+::operator++ (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+++ overload 
+
+Operator ++ as pre-\/increment \mbox{\Hypertarget{classIterator_a8a5290d6e78810cebd020bda10dc0177}\label{classIterator_a8a5290d6e78810cebd020bda10dc0177}} 
+\index{Iterator$<$ pair\_type, node\_type $>$@{Iterator$<$ pair\_type, node\_type $>$}!operator++@{operator++}}
+\index{operator++@{operator++}!Iterator$<$ pair\_type, node\_type $>$@{Iterator$<$ pair\_type, node\_type $>$}}
+\doxysubsubsection{\texorpdfstring{operator++()}{operator++()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename pair\+\_\+type , typename node\+\_\+type $>$ \\
+\mbox{\hyperlink{classIterator}{Iterator}} \mbox{\hyperlink{classIterator}{Iterator}}$<$ pair\+\_\+type, node\+\_\+type $>$\+::operator++ (\begin{DoxyParamCaption}\item[{int}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+++ overload 
+
+Operator ++ as post-\/increment with {\ttfamily int} . \mbox{\Hypertarget{classIterator_a1d21cceef0603b06978a1ec92b54d0bc}\label{classIterator_a1d21cceef0603b06978a1ec92b54d0bc}} 
+\index{Iterator$<$ pair\_type, node\_type $>$@{Iterator$<$ pair\_type, node\_type $>$}!operator-\/$>$@{operator-\/$>$}}
+\index{operator-\/$>$@{operator-\/$>$}!Iterator$<$ pair\_type, node\_type $>$@{Iterator$<$ pair\_type, node\_type $>$}}
+\doxysubsubsection{\texorpdfstring{operator-\/$>$()}{operator->()}}
+{\footnotesize\ttfamily template$<$typename pair\+\_\+type , typename node\+\_\+type $>$ \\
+pointer \mbox{\hyperlink{classIterator}{Iterator}}$<$ pair\+\_\+type, node\+\_\+type $>$\+::operator-\/$>$ (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+-\/$>$ overload 
+
+\#\+TODO 
+
+\doxysubsection{Friends And Related Function Documentation}
+\mbox{\Hypertarget{classIterator_ac9f4b77c14334b544087c908e0eeb1f2}\label{classIterator_ac9f4b77c14334b544087c908e0eeb1f2}} 
+\index{Iterator$<$ pair\_type, node\_type $>$@{Iterator$<$ pair\_type, node\_type $>$}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!Iterator$<$ pair\_type, node\_type $>$@{Iterator$<$ pair\_type, node\_type $>$}}
+\doxysubsubsection{\texorpdfstring{operator"!=}{operator!=}}
+{\footnotesize\ttfamily template$<$typename pair\+\_\+type , typename node\+\_\+type $>$ \\
+bool operator!= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classIterator}{Iterator}}$<$ pair\+\_\+type, node\+\_\+type $>$ \&}]{lhs,  }\item[{const \mbox{\hyperlink{classIterator}{Iterator}}$<$ pair\+\_\+type, node\+\_\+type $>$ \&}]{rhs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+!= overload 
+
+Operator != overloading. {\ttfamily lhs} const \mbox{\hyperlink{classIterator}{Iterator}} l-\/value reference used as lhs of the equation while {\ttfamily rhs} const \mbox{\hyperlink{classIterator}{Iterator}} l-\/value reference used as rhs of the equation. Returning value obtained using the == operator and taking the negation of the result. \mbox{\Hypertarget{classIterator_a1baec9d3f7e8e68b4fb5e35b5ca5067c}\label{classIterator_a1baec9d3f7e8e68b4fb5e35b5ca5067c}} 
+\index{Iterator$<$ pair\_type, node\_type $>$@{Iterator$<$ pair\_type, node\_type $>$}!operator==@{operator==}}
+\index{operator==@{operator==}!Iterator$<$ pair\_type, node\_type $>$@{Iterator$<$ pair\_type, node\_type $>$}}
+\doxysubsubsection{\texorpdfstring{operator==}{operator==}}
+{\footnotesize\ttfamily template$<$typename pair\+\_\+type , typename node\+\_\+type $>$ \\
+bool operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classIterator}{Iterator}}$<$ pair\+\_\+type, node\+\_\+type $>$ \&}]{lhs,  }\item[{const \mbox{\hyperlink{classIterator}{Iterator}}$<$ pair\+\_\+type, node\+\_\+type $>$ \&}]{rhs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+== overload 
+
+Operator == overloading. {\ttfamily lhs} const \mbox{\hyperlink{classIterator}{Iterator}} l-\/value reference used as lhs of the equation while {\ttfamily rhs} const \mbox{\hyperlink{classIterator}{Iterator}} l-\/value reference used as rhs of the equation. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/iterator.\+hpp\end{DoxyCompactItemize}

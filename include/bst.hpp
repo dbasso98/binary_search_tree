@@ -12,13 +12,13 @@
 
 #define COUNT 10  
 
-/** \class bst bst.hpp "include/node.hpp" "include/iterator.hpp" 
+/** \class bst bst.hpp "include/node.hpp include/iterator.hpp"
+ *  
  * Custom Binary Search Tree Template class.
  * Every instance of the bst class is a hierarchical (ordered) data structure.
  */
 template<typename key_type, typename value_type, typename comparison=std::less<key_type>>
 class bst {
-    /** \subsection Using declarations below*/
 
     /** using declaration for pair_type. Represents a pair type of key and associated value. */
     using pair_type = std::pair<const key_type, value_type>;
@@ -28,8 +28,6 @@ class bst {
     using const_iterator = Iterator<const pair_type, node_type>;
     /** using declaration for pair_type. Represents an iterator class, defined by a pair type and node type. */
     using iterator = Iterator<pair_type, node_type>;
-
-    /** \subsection Private member variables. */
 
     /** \brief head
      * 
@@ -46,26 +44,27 @@ class bst {
      * Compare two nodes, as \private comp.*/
     comparison comp;
 
-    /** \subsection Private member functions. */
-
-    /** internal insert
+    /** \brief internal insert
      * 
-     * Internal function to insert node. \p x passed as r-value, of typename O. */
+     * Private function to insert node. \p x passed as r-value, of typename O. */
     template<typename O>
     std::pair<iterator, bool> _insert(O&& x);
 
     /** \brief internal find
      * 
-     * Internal function for finding a node based on key. \p x passed as r-value, of typename T. */
+     * Private function for finding a node based on key. \p x passed as r-value, of typename T. */
     template<typename T>
     node_type* _find(T&& x) const noexcept;
 
+    /** \brief internal print2D
+     * 
+     * Private function for printing tree in 2D */
     void _print2D(node_type *root, int space) const noexcept;
 
 
-    /** #TODO
+    /** \brief repopulate the tree
      * 
-     * Function to repopulate tree #TODO. \p child passed, pointer to a node type. 
+     * Function to properly repopulate tree. \p child passed, pointer to a node type. 
      * Used after erasing a node in the tree.*/
     void repopulate(node_type* child);
 
@@ -80,29 +79,37 @@ class bst {
 
     public:
 
-    /** \brief Default iterator Constructor and Destructor */
+    /** \brief Default iterator Constructor */
     bst() = default;
+    /** \brief Default iterator Destructor */
     ~bst() noexcept = default;
 
-    /** \brief move semantics */
+    /** \brief 
+     * 
+     * Move constructor */
     explicit bst(bst&& other) noexcept = default;
+    /** \brief 
+     * 
+     * Move assignment */
 	bst& operator=(bst&& other) noexcept = default;
 
-    /** \brief deep-copy semantics */
+    /** \brief 
+     * 
+     * Deep-copy constructor */
     explicit bst(const bst& other):
     _size{other._size}, comp{other.comp} {
         if(other.head)
             head.reset(new node_type{*(other.head.get())});
     }
 
-    /** \brief copy assignment */
+    /** \brief 
+     * 
+     * Deep-copy assignment */
     bst& operator=(const bst& x) {
         auto tmp {x}; // copy ctor
         *this = std::move(tmp); // move assignment
         return *this;    
     }
-    
-    /** \subsection Public member functions */
 
     /** \brief delete tree
      * 
@@ -119,46 +126,53 @@ class bst {
         _print2D(head.get(), 0);  
     } 
 
-    /** \subsection Range for loop components implementation. */ 
-
     /** \brief begin of for loop with iterator
      * 
-     * Return an iterator to the left-most node (which, likely, is not the root node).*/
+     * Return an iterator to the left-most node (which, likely, is not the root node).
+     * The returning value is obtained using the fucntion leftiest(),
+     * which finds the leaf node placed at the very far left*/
     iterator begin() noexcept{
         return iterator{head.get()->leftiest()};
     }
 
     /** \brief const begin of for loop with iterator
      * 
-     * Return a const iterator to the left-most node (which, likely, is not the root node).*/
+     * Return a const iterator to the left-most node (which, likely, is not the root node).
+     * The returning value is obtained using the fucntion leftiest(),
+     * which finds the leaf node placed at the very far left*/
     const_iterator begin() const noexcept {
         return const_iterator{head.get()->leftiest()};
     }
 
     /** \brief const begin of for loop with iterator
      * 
-     * Return a const iterator to the left-most node (which, likely, is not the root node).*/
+     * Return a const iterator to the left-most node (which, likely, is not the root node).
+     * The returning value is obtained using the fucntion leftiest(),
+     * which finds the leaf node placed at the very far left*/
     const_iterator cbegin() const noexcept {
         return const_iterator{head.get()->leftiest()};
     }
 
     /** \brief end of for loop with iterator
      * 
-     * Returns an iterator to one-past the last element. */
+     * Returns an iterator to one-past the last element. 
+     * Basically an iterator initialized to a nullptr*/
     iterator end() noexcept {
         return iterator{nullptr};
     }
 
     /** \brief const end of for loop with iterator
      * 
-     * Returns a const iterator to one-past the last element. */
+     * Returns a const iterator to one-past the last element.
+     * Basically a const_iterator initialized to a nullptr*/
     const_iterator end() const noexcept {
         return const_iterator{nullptr};
     }
 
     /** \brief const end of for loop with iterator
      * 
-     * Returns a const iterator to one-past the last element. */
+     * Returns a const iterator to one-past the last element.
+     * Basically a const_iterator initialized to a nullptr*/
     const_iterator cend() const noexcept{
         return const_iterator{nullptr};
     }
@@ -166,22 +180,21 @@ class bst {
     /** \brief find element in tree
      * 
      * Find a given key, \p x passed as l-value. 
-     * If the key is present, returns an iterator to the proper node, end() otherwise.
+     * If the key is present, returns an iterator to the proper node; if not
+     * the function _find() returns a nullptr, so same result as end().
      */
     iterator find(const key_type& x) noexcept{
-        return iterator{_find(x)};
-        
-        
+        return iterator{_find(x)}; 
     }
 
     /** \brief const find element in tree by key
      * 
      * Find a given key, \p x passed as l-value. 
-     * If the key is present, returns a const iterator to the proper node, end() otherwise.
+     * If the key is present, returns a const_iterator to the proper node; if not
+     * the function _find() returns a nullptr, so same result as cend().
      */
     const_iterator find(const key_type& x) const noexcept{
         return const_iterator{_find(x)};
-        
     }
 
     /** \brief insert node by pair
@@ -223,22 +236,20 @@ class bst {
 
     /** \brief balance tree
      * 
-     * Function to balance the tree. */
+     * Function to balance the tree.*/
     void balance();
     
-    /** \brief size of tree
+    /** \brief depth of tree
      * 
-     * Returns size of the tree. */
+     * Returns depth of the tree. */
     std::size_t size() const noexcept{
         return this->_size;
     }
 
-
-    /** \subsection Operators overload. */
-
     /** \brief put-to
      * 
-     * Put-to operator, takes insatnce of ostream, and \p x as l-value reference to bst type. */
+     * Put-to operator, takes instance of ostream, and \p x as l-value reference to bst type. 
+     */
     friend
     std::ostream& operator<<(std::ostream& os, const bst& x) {
         os << "Depth of the tree is: " << x.size() << "\n";
@@ -249,11 +260,12 @@ class bst {
         return os;
     }
 
-    /** subscripting l-value 
+    /** \brief subscripting l-value 
      * 
      * Subscripting operator, takes \p x as l-value reference, of type key.
      * Returns a reference to the value that is mapped to a key equivalent to x, 
      * performing an insertion if such key does not already exist.
+     * Takes advantage of the already defined insert() function.
      */
     value_type& operator[](const key_type& x){
         iterator it = find(x);
@@ -263,11 +275,12 @@ class bst {
         return insert(pair_type{x,{}}).first->second;
     }
     
-    /** subscripting r-value
+    /** \brief subscripting r-value
      * 
      * Subscripting operator, takes \p x as r-value reference, of type key.
      * Returns a reference to the value that is mapped to a key equivalent to x, 
      * performing an insertion if such key does not already exist.
+     * Takes advantage of the already defined insert() function.
      */
     value_type& operator[](key_type&& x){
         iterator it = find(std::move(x));

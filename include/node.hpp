@@ -5,10 +5,13 @@
 #include <utility> // std::move and std::pair
 
 
-/** Template class for members of the binary search tree concept.
+/** \class node
+ * 
+ * Template class for members of the binary search tree concept.
  * Every element of the binary search tree is a node. 
  * Each node stores a pair of a key and the associated value.
  */
+
 template <typename pair_type>
 class node{
     /** \brief node content
@@ -18,7 +21,7 @@ class node{
 
     /** \brief pointer to far left node
      * 
-     *Private function that returns the node on the far left side of the tree, 
+     * Private function that returns the node on the far left side of the tree, 
      * used as the begin of the iterator.
      */    
     node* _leftmost(node* other) const noexcept {
@@ -131,39 +134,53 @@ class node{
         return *this;    
     }
 
-    /** \subsection Getter functions of node class*/
 
-    /** \returns pointer to left child*/
+    /** \brief get left child of a node
+     * 
+     * \returns pointer to left child*/
     node* get_left() noexcept{
         return left_child.get();
     }
 
-    /** \returns pointer to right child*/
+    /** \brief get right child of a node
+     * 
+     * \returns pointer to right child*/
     node* get_right() noexcept{
         return right_child.get();
     }
 
-    /** \returns pointer to parent*/
+    /** \brief get parent of a node
+     * 
+     *  \returns pointer to parent*/
     node* get_parent() noexcept{
         return parent_node;
     }
 
-    /** \returns by reference, contents of node, as data */
+    /** \brief get data contained in a node
+     * 
+     *  \returns by reference, contents of node, as data */
     pair_type& get_data() noexcept{
         return data;
     }
 
-    /** \returns by const reference, contents of node, as data */
+    /** \brief get data contained in a node
+     * 
+     * \returns by const reference, contents of node, as data */
     const pair_type& get_data() const noexcept{
         return data;
     }
 
-    /** \returns pointer to  leftmost node */
+    /** \brief get far left leaf node
+     * 
+     * \returns pointer to  leftmost node 
+     */
     node* leftiest() noexcept {
 		return _leftmost(this);
 	}
 
-    /** \returns const leftmost node */
+    /** \brief get far left leaf node
+     * 
+     * \returns const leftmost node */
 	const node* leftiest() const noexcept {
 		return _leftmost(this);
 	}
