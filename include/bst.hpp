@@ -79,32 +79,24 @@ class bst {
 
     public:
 
-    /** \brief Default iterator Constructor */
+    /** \brief Default bst Constructor */
     bst() = default;
-    /** \brief Default iterator Destructor */
+    /** \brief Default bst Destructor */
     ~bst() noexcept = default;
 
-    /** \brief 
-     * 
-     * Move constructor */
+    /** \brief  Move constructor */
     explicit bst(bst&& other) noexcept = default;
-    /** \brief 
-     * 
-     * Move assignment */
+    /** \brief  Move assignment */
 	bst& operator=(bst&& other) noexcept = default;
 
-    /** \brief 
-     * 
-     * Deep-copy constructor */
+    /** \brief Deep-copy constructor */
     explicit bst(const bst& other):
     _size{other._size}, comp{other.comp} {
         if(other.head)
             head.reset(new node_type{*(other.head.get())});
     }
 
-    /** \brief 
-     * 
-     * Deep-copy assignment */
+    /** \brief  Deep-copy assignment */
     bst& operator=(const bst& x) {
         auto tmp {x}; // copy ctor
         *this = std::move(tmp); // move assignment
@@ -181,7 +173,7 @@ class bst {
      * 
      * Find a given key, \p x passed as l-value. 
      * If the key is present, returns an iterator to the proper node; if not
-     * the function _find() returns a nullptr, so same result as end().
+     * the function _find() returns a nullptr, so equivalent result as end().
      */
     iterator find(const key_type& x) noexcept{
         return iterator{_find(x)}; 
@@ -191,7 +183,7 @@ class bst {
      * 
      * Find a given key, \p x passed as l-value. 
      * If the key is present, returns a const_iterator to the proper node; if not
-     * the function _find() returns a nullptr, so same result as cend().
+     * the function _find() returns a nullptr, so equivalent result as cend().
      */
     const_iterator find(const key_type& x) const noexcept{
         return const_iterator{_find(x)};
@@ -207,7 +199,7 @@ class bst {
         return _insert(x);
     }
     
-    /** \brief const insert node by pair
+    /** \brief insert node by pair
      * 
      * Function to insert node based on \p x , as r-value reference pair type. 
      * The function returns a pair of an iterator (pointing to the node) and a bool. 

@@ -29,8 +29,9 @@ class Iterator {
      * which is passed as a pointer \p cur . */
     node_type *next(node_type *cur) const noexcept;
 
-    /** \brief Default iterator Constructor and Destructor */
+    /** \brief Default iterator Constructor*/
     Iterator() = default;
+    /** \brief Default iterator Destructor */
     ~Iterator() noexcept = default;
 
     /** \brief Custom iterator Constructor

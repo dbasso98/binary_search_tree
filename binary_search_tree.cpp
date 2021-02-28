@@ -4,9 +4,9 @@
 #include <memory>
 #include <utility>
 #include <exception>
-#include "node.hpp"
-#include "iterator.hpp"
-#include "bst.hpp"
+#include "include/node.hpp"
+#include "include/iterator.hpp"
+#include "include/bst.hpp"
 
 int main() {
 

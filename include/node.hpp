@@ -57,10 +57,14 @@ class node{
      */
     std::unique_ptr<node> right_child; 
 
-    /** \brief Default node Constructor and Destructor 
+    /** \brief Default node Constructor
      * 
     */
     node() = default;
+
+    /** \brief Default node Destructor 
+     * 
+    */
     ~node() noexcept = default;
 
     /** \brief Custom node Constructor
@@ -101,7 +105,7 @@ class node{
      * using default compiler generated ones.
      */
     explicit node(node&& other) noexcept = default;
-    /** \brief move semantics
+    /** \brief move assignment
      * 
      * Implementing move assignment
      * using default compiler generated ones.
@@ -109,7 +113,7 @@ class node{
     node& operator=(node&& other) noexcept = default;
 
     
-    /** \brief deep copy semantics
+    /** \brief deep copy constructor
      * 
      * Managing the resources from the lowest level, to achieve a deep copy of the bst itself.
      */
@@ -128,7 +132,7 @@ class node{
         }
     }
     
-    /** \brief copy assignment
+    /** \brief deep copy assignment
      * 
      */
     node& operator=(const node& x) {
