@@ -379,7 +379,7 @@ node<std::pair<const key_type, value_type>>* bst<key_type, value_type, compariso
         // this means that we have found that there already is a node
         // with same key w.r.t. the one we wanted to insert
         else {
-            std::cout << "Found node with key = "<< x << std::endl;  
+            std::cout << "Found node with key = "<< x <<" . The value is: "<< tmp->get_data().second << std::endl;
 
             auto stop = std::chrono::high_resolution_clock::now(); 
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);  
