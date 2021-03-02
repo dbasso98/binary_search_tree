@@ -70,8 +70,8 @@ class Iterator {
      * Operator ++ as post-increment with \p int . */
     Iterator operator++(int) 
     {
-        auto update(*this);
-        ++(*update);
+        auto update = *this;
+        ++(*this);
         return update;
     }
 
